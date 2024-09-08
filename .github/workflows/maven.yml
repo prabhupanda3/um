@@ -33,8 +33,10 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
-        context: E:/AngularProject/UserManagement
-        file: E:/AngularProject/UserManagement/Dockerfile
+        image: prabhu2000/aws-githun-action
+        tags: latest
+        registry: registry-url.io
+        dockerfile: Dockerfile
         push: true
         no-cache: true
         tags: ${{ secrets.DOCKERHUB_USERNAME }}/prabhu2000/aws-githun-action:latest
