@@ -38,7 +38,7 @@ jobs:
       with:
         context: .  # Set the context to the root of the repository or wherever the Dockerfile is located
         dockerfile: AngularProject/UserManagement/Dockerfile  # Path to the Dockerfile relative to the context
-        image: ${{ secrets.DOCKERHUB_USERNAME }}/aws-githun-action
+        image: ${{ secrets.DOCKER_USERNAME }}/aws-githun-action
         tags: latest
         registry: docker.io
         enableBuildKit: true
