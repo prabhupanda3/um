@@ -14,8 +14,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: List files
-      run: ls -R
+    - name: List all files
+      run: ls -R  # This step will list all files and directories, helping us debug the path issue
 
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1
@@ -36,8 +36,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        context: AngularProject/UserManagement  # Directory where Dockerfile and other files are located
-        dockerfile: Dockerfile  # Dockerfile inside the context directory
+        context: AngularProject/UserManagement  # Assuming this is where your Dockerfile is
+        dockerfile: Dockerfile  # Dockerfile is in the context directory
         image: ${{ secrets.DOCKERHUB_USERNAME }}/prabhu2000/aws-githun-action
         tags: latest
         registry: docker.io
