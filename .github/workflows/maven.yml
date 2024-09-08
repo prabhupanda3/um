@@ -34,7 +34,7 @@ jobs:
       uses: docker/setup-buildx-action@v3
 
     - name: Build and push Docker image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v5
       with:
         context: .  # Set the context to the root of the repository or wherever the Dockerfile is located
         dockerfile: AngularProject/UserManagement/Dockerfile  # Path to the Dockerfile relative to the context
