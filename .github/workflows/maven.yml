@@ -39,7 +39,7 @@ jobs:
         context: .  # Set the context to the root of the repository or wherever the Dockerfile is located
         dockerfile: AngularProject/UserManagement/Dockerfile  # Path to the Dockerfile relative to the context
         image: ${{ secrets.DOCKER_USERNAME }}/user-management
-        tags: latest
+        tags: ${{ vars.DOCKERHUB_USERNAME }}/user-management:latest
         registry: docker.io
         enableBuildKit: true
         push: true
