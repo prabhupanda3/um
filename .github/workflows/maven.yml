@@ -34,4 +34,4 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: true
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/prabhu2000/aws-githun-action:latest
