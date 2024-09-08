@@ -36,7 +36,8 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
-        dockerfile: Dockerfile  # Dockerfile is in the context directory
+        context: .  # Set the context to the root of the repository or wherever the Dockerfile is located
+        dockerfile: AngularProject/UserManagement/Dockerfile  # Path to the Dockerfile relative to the context
         image: ${{ secrets.DOCKERHUB_USERNAME }}/prabhu2000/aws-githun-action
         tags: latest
         registry: docker.io
