@@ -34,7 +34,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: ./e/AngularProject/UserManagement
-        dockerfile: ./AngularProject/UserManagement/Dockerfile   # Dockerfile is relative to the context
+        dockerfile: ./e/AngularProject/UserManagement/Dockerfile   # Dockerfile is relative to the context
         image: ${{ secrets.DOCKERHUB_USERNAME }}/prabhu2000/aws-githun-action
         tags: latest
         registry: docker.io
