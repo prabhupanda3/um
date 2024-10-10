@@ -33,7 +33,7 @@ public class RegistrationService {
 	             //.map(authority -> (Role) authority)
 	            //.collect(Collectors.toList()));
 			Set<Role> role=roleRepository.findByAuthority("USER");
-			user.setRole(role);
+			//user.setRole(role);
 			
 	       
 	        try {

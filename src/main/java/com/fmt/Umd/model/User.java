@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,8 +36,9 @@ public class User implements UserDetails{
 	@Column
 	private String hierarchy;
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	 @JoinTable(joinColumns = {@JoinColumn(name="user_id")},
+	@OneToMany(fetch = FetchType.EAGER)
+	 @JoinTable( name = "user_role",
+			 joinColumns = {@JoinColumn(name="user_id")},
 		        inverseJoinColumns = {@JoinColumn(name="role_id")}
 			    )
 	 private Set<Role> role;
@@ -65,7 +66,6 @@ public class User implements UserDetails{
 	}
 
 	
-
 	public Set<Role> getRole() {
 		return role;
 	}
@@ -118,11 +118,7 @@ public class User implements UserDetails{
 		this.hierarchy = hierarchy;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return this.role;
-	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub
@@ -130,7 +126,14 @@ public class User implements UserDetails{
 	}
 
 	
-	  @Override public boolean isAccountNonLocked() { 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return this.role;
+	}
+
+	@Override 
+	public boolean isAccountNonLocked() { 
 		  // TODO Auto-generated method stub 
 		  return true; 
 		  }

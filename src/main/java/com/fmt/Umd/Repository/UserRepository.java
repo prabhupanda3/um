@@ -1,7 +1,7 @@
 package com.fmt.Umd.Repository;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,10 +11,9 @@ import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
-public Optional<User> findByUsername(String username); 
+public Optional<User> findByUsername(String username);
 @Query("SELECT u.role FROM User u WHERE u.username = :username")
-public List<Role> getUSerRoleByUseName(String username);
+public Role getUSerRoleByUseName(String username);
 User findByUsernameOrPasswordOrEmail(String username,String password,String email);
-
 
 }

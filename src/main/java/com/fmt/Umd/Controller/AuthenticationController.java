@@ -56,8 +56,9 @@ public class AuthenticationController {
 		  Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 	   String token= tokenService.getGenratedToken(authentication);
 	   System.out.println("TOKEN  :"+token);
-	   Set<String>  endpoints= roleService.getRolesByUserName(user.getUsername());
-	  Set<Module> moduleset= moduleService.getModuleListBySetOfEndpoints(endpoints);
+	  // Set<String>  endpoints= roleService.getRolesByUserName(user.getUsername());
+	   Set<Module> moduleset=roleService.getRolesByUserName(user.getUsername());
+	 // Set<Module> moduleset= moduleService.getModuleListBySetOfEndpoints(endpoints);
 		User user2=authenticationService.getUserByUserName(user.getUsername());
 		 loginresponseDTO=new LoginresponseDTO(user,token,moduleset);
 		if(token!=null) {

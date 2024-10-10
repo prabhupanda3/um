@@ -63,6 +63,7 @@ public class D4data {
 	public String getMeterSlno() {
 		return meterSlno;
 	}
+	
 	public void setMeterSlno(String meterSlno) {
 		this.meterSlno = meterSlno;
 	}
