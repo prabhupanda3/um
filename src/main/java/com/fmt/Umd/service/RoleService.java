@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
+import com.fmt.Umd.model.Module;
+import com.fmt.Umd.model.ModuleAction;
 import com.fmt.Umd.model.Role;
 @Service
 public class RoleService {
@@ -33,20 +34,41 @@ public class RoleService {
 		}
 		return role;
 	}
-	public Set<String> getRolesByUserName(String username) {
+	public Set<Module> getRolesByUserName(String username) {
 		
-		Set<String> endpoints=new HashSet<String>();
+		Set<Module> moduleSet=new HashSet<Module>();
 		try {
-	List<Role>	roles=userRepository.getUSerRoleByUseName(username);
-	roles.stream().forEach(role->endpoints.add(role.getEndPoint()));
-	return endpoints;
+	Role	roles=userRepository.getUSerRoleByUseName(username);
+	//roles.stream().forEach(role->endpoints.add(role.getEndPoint()));
+	 moduleSet= roles.getModule();
+	return moduleSet;
 	}
 	catch(Exception ex) {
-		endpoints.add("No end Points Found ");
+		
 		ex.printStackTrace();
-		return endpoints;
+		return moduleSet;
 	}
 	}
+	public Set<Role> getGrantedAuthority(String username){
+		Set<Role>	rolesBasedOnParentRole=null;
+		try {
+			Role	role=userRepository.getUSerRoleByUseName(username);
+		Set<ModuleAction>	moduleActions=role.getModuleAction();
+				String authority=role.getAuthority();
+				rolesBasedOnParentRole=roleRepository.findAllByParentRole(authority);
+				
+				return rolesBasedOnParentRole;
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return rolesBasedOnParentRole;
+		}
+		
+	}
+	
+	
+	
+	
 	}
 	
 	

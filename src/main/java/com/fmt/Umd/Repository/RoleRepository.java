@@ -8,4 +8,6 @@ import com.fmt.Umd.model.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Integer>{
 	Set<Role> findByAuthority(String Authority); 
+	public Set<Role> findAllByParentRole(String authority);
+
 }

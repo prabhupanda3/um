@@ -1,6 +1,10 @@
 package com.fmt.Umd.configuration;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +26,9 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 
+import com.fmt.Umd.model.Module;
 import com.fmt.Umd.model.Role;
+import com.fmt.Umd.model.SubModule;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.UserDetailsServices;
 import com.nimbusds.jose.jwk.JWK;
@@ -36,7 +42,6 @@ import cm.fmt.Umd.util.RSAKeyProperties;
 
 @Configuration
 @ComponentScan(basePackages = {"cm.fmt.Umd.util"})
-
 public class SicurityConfiguration {
 
 	private  RSAKeyProperties rSAKeyProperties;
@@ -49,9 +54,6 @@ public class SicurityConfiguration {
 		this.userDetailsServices=userDetailsServices;
 		
 	}
-	
-	
-	
 	@Bean 
     public JwtEncoder jwtEncoder() {	
 	JWK jwk=new RSAKey.Builder(rSAKeyProperties.getPublicKey()).privateKey(rSAKeyProperties.getPrivateKey()).build();
@@ -80,8 +82,31 @@ public class SicurityConfiguration {
 		
 		auth.mvcMatchers("/auth/**").permitAll();
 	    List<Role>	roles=roleService.getAllRoles();
-	   roles.stream().forEach(role->auth.mvcMatchers(role.getEndPoint()+"/**").hasRole(role.getAuthority()));
-       auth.anyRequest().denyAll();
+	    String authority="";
+	    Map<String,Set<String>> authorityEndPointSet=new HashMap<>();
+	    Set<String> endPoints=new HashSet<>();
+	    for(Role role:roles) {
+	    	
+	    Set<Module> modules=role.getModule();
+	    for(Module module:modules) {
+	    List<SubModule>	sabmodules=module.getSubModule();
+	    for(SubModule submodule:sabmodules) {
+	    	
+	    	endPoints.add(submodule.getEndpoint());
+	    }
+	    
+	    }
+	    System.out.println("Authorty :"+role.getAuthority());
+	    authorityEndPointSet.put(role.getAuthority(), endPoints);
+	    }
+	    Set<String> AuthorityName=authorityEndPointSet.keySet();
+	    for(String authori:AuthorityName) {
+	    	System.out.println("Authority :"+String.join(",",authorityEndPointSet.get(authori)));
+	    authorityEndPointSet.get(authori).toArray(new String[0]);
+	   
+	    	 auth.mvcMatchers().hasRole(authori.toString());
+	    }
+	    auth.anyRequest().denyAll();
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 	http.sessionManagement(seession->seession.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
