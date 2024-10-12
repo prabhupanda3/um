@@ -1,7 +1,6 @@
 package com.fmt.Umd.model;
 
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;

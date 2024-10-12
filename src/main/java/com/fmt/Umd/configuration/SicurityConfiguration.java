@@ -1,7 +1,7 @@
 package com.fmt.Umd.configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,8 +83,8 @@ public class SicurityConfiguration {
 		auth.mvcMatchers("/auth/**").permitAll();
 	    List<Role>	roles=roleService.getAllRoles();
 	    String authority="";
-	    Map<String,Set<String>> authorityEndPointSet=new HashMap<>();
-	    Set<String> endPoints=new HashSet<>();
+	    Map<String,List<String>> authorityEndPointSet=new HashMap<>();
+	    List<String> endPoints=new ArrayList<>();
 	    for(Role role:roles) {
 	    	
 	    Set<Module> modules=role.getModule();
@@ -101,10 +101,9 @@ public class SicurityConfiguration {
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
 	    for(String authori:AuthorityName) {
-	    	System.out.println("Authority :"+String.join(",",authorityEndPointSet.get(authori)));
-	    authorityEndPointSet.get(authori).toArray(new String[0]);
-	   
-	    	 auth.mvcMatchers().hasRole(authori.toString());
+	    	System.out.println("Authority Endpoints:"+String.join(",",authorityEndPointSet.get(authori)));
+	  List<String> endpointsList= authorityEndPointSet.get(authori);
+	  auth.mvcMatchers(endpointsList.toArray(new String[0])).hasRole(authori);
 	    }
 	    auth.anyRequest().denyAll();
        });
