@@ -1,7 +1,7 @@
 package com.fmt.Umd.configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -83,8 +83,8 @@ public class SicurityConfiguration {
 		auth.mvcMatchers("/auth/**").permitAll();
 	    List<Role>	roles=roleService.getAllRoles();
 	    String authority="";
-	    Map<String,Set<String>> authorityEndPointSet=new HashMap<>();
-	    Set<String> endPoints=new HashSet<>();
+	    Map<String,List<String>> authorityEndPointSet=new HashMap<>();
+	    List<String> endPoints=new ArrayList<>();
 	    for(Role role:roles) {
 	    	
 	    Set<Module> modules=role.getModule();
@@ -100,17 +100,18 @@ public class SicurityConfiguration {
 	    authorityEndPointSet.put(role.getAuthority(), endPoints);
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
-	   // System.out.println("");
-    	auth.mvcMatchers("/userRole/**").hasRole("ADMIN");
-	    for (String authorit : authorityEndPointSet.keySet()) {
-            auth.mvcMatchers(authorityEndPointSet.get(authorit).toArray(new String[0])).hasRole(authorit);
-        }
+	    for(String authori:AuthorityName) {
+	    	System.out.println("Authority Endpoints:"+String.join(",",authorityEndPointSet.get(authori)));
+	  List<String> endpointsList= authorityEndPointSet.get(authori);
+	  auth.mvcMatchers(endpointsList.toArray(new String[0])).hasRole(authori);
+	    }
 	    auth.anyRequest().denyAll();
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 	http.sessionManagement(seession->seession.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 	return http.build();
     }
+   
    
     
 
