@@ -100,12 +100,11 @@ public class SicurityConfiguration {
 	    authorityEndPointSet.put(role.getAuthority(), endPoints);
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
-	    for(String authori:AuthorityName) {
-	    	System.out.println("Authority :"+String.join(",",authorityEndPointSet.get(authori)));
-	    authorityEndPointSet.get(authori).toArray(new String[0]);
-	   
-	    	 auth.mvcMatchers().hasRole(authori.toString());
-	    }
+	   // System.out.println("");
+    	auth.mvcMatchers("/userRole/**").hasRole("ADMIN");
+	    for (String authorit : authorityEndPointSet.keySet()) {
+            auth.mvcMatchers(authorityEndPointSet.get(authorit).toArray(new String[0])).hasRole(authorit);
+        }
 	    auth.anyRequest().denyAll();
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
