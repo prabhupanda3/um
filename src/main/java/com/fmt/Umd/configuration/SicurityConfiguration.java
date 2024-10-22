@@ -91,7 +91,6 @@ public class SicurityConfiguration {
 	    for(Module module:modules) {
 	    List<SubModule>	sabmodules=module.getSubModule();
 	    for(SubModule submodule:sabmodules) {
-	    	
 	    	endPoints.add(submodule.getEndpoint());
 	    }
 	    
@@ -100,11 +99,17 @@ public class SicurityConfiguration {
 	    authorityEndPointSet.put(role.getAuthority(), endPoints);
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
-	    for(String authori:AuthorityName) {
-	    	System.out.println("Authority Endpoints:"+String.join(",",authorityEndPointSet.get(authori)));
-	  List<String> endpointsList= authorityEndPointSet.get(authori);
-	  auth.mvcMatchers(endpointsList.toArray(new String[0])).hasRole(authori);
-	    }
+			
+			/*
+			 * for(String authori:AuthorityName) {
+			 * System.out.println("Authority Endpoints:"+String.join(",",
+			 * authorityEndPointSet.get(authori))); List<String> endpointsList=
+			 * authorityEndPointSet.get(authori); auth.mvcMatchers(endpointsList.toArray(new
+			 * String[0]).toString()).hasRole(authori); }
+			 */
+		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("ADMIN");	 
+		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("JUNIORENGINEER");	 
+
 	    auth.anyRequest().denyAll();
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
@@ -112,18 +117,16 @@ public class SicurityConfiguration {
 	return http.build();
     }
    
-    
-
-   @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-	JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter=new	JwtGrantedAuthoritiesConverter();
-	jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-	jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-	JwtAuthenticationConverter jwtAuthenticationConverter=	new JwtAuthenticationConverter();
-	jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-	return jwtAuthenticationConverter;
-    }
-
-
+ 
+	  @Bean public JwtAuthenticationConverter jwtAuthenticationConverter() {
+	  JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter=new
+	  JwtGrantedAuthoritiesConverter();
+	  jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+	  jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+	  JwtAuthenticationConverter jwtAuthenticationConverter= new
+	  JwtAuthenticationConverter();
+	  jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+	  jwtGrantedAuthoritiesConverter); return jwtAuthenticationConverter; }
+	  
 
 }
