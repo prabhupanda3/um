@@ -9,9 +9,6 @@ import org.springframework.stereotype.Component;
 public class RSAKeyProperties {
 	private RSAPublicKey publicKey;
     private RSAPrivateKey privateKey;
-    
-    
-	
 	public RSAKeyProperties() { 
 		KeyPair keyPair=KeyGenerator.getGeneratedKey();
 		this.publicKey =(RSAPublicKey)keyPair.getPublic();

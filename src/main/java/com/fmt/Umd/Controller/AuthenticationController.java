@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +55,12 @@ public class AuthenticationController {
 		try {
 			System.out.println("Login method executed :"+user.getUsername()+"User name and password :"+user.getPassword());
 		  Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
-	   String token= tokenService.getGenratedToken(authentication);
+		  Authentication authentications = SecurityContextHolder.getContext().getAuthentication();
+		  if (authentications != null) {
+		      System.out.println(authentications.getAuthorities());
+		  }
+		  
+		  String token= tokenService.getGenratedToken(authentication);
 	   System.out.println("TOKEN  :"+token);
 	  // Set<String>  endpoints= roleService.getRolesByUserName(user.getUsername());
 	   Set<Module> moduleset=roleService.getRolesByUserName(user.getUsername());
