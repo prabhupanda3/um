@@ -96,15 +96,22 @@ public class SicurityConfiguration {
 	    }
 	    
 	    }
-	    System.out.println("Authorty :"+role.getAuthority());
 	    authorityEndPointSet.put(role.getAuthority(), endPoints);
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
-	    for(String authori:AuthorityName) {
-	    	System.out.println("Authority Endpoints:"+String.join(",",authorityEndPointSet.get(authori)));
-	  List<String> endpointsList= authorityEndPointSet.get(authori);
-	  auth.mvcMatchers(endpointsList.toArray(new String[0])).hasRole(authori);
-	    }
+		/*
+		 * for(String authori:AuthorityName) {
+		 * System.out.println("Authority :"+authori+" Authority Endpoints:"+String.join(
+		 * ",",authorityEndPointSet.get(authori))); List<String> endpointsList=
+		 * authorityEndPointSet.get(authori); String[]
+		 * endpoints=endpointsList.toArray(new String[0]);
+		 * 
+		 * 
+		 * }
+		 */
+		 auth.mvcMatchers("/devicesummary/**","/userRole/**").hasRole("ADMIN");
+		 auth.mvcMatchers("/devicesummary/**","/userRole/**").hasRole("JUNIORENGINEER");
+
 	    auth.anyRequest().denyAll();
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());

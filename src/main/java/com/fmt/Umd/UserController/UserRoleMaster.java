@@ -23,8 +23,8 @@ private RoleService roleService;
 		try {
 			String userName=principal.getName();
 			childrole=roleService.getGrantedAuthority(userName);
-			return childrole;
 			
+			return childrole;	
 		}catch(Exception ex) {
 			ex.printStackTrace();
 			return childrole;

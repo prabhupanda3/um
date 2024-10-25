@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Repository.UserRepository;
+import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.User;
 
 @Service
@@ -21,7 +22,10 @@ public class AuthenticationService {
 		
 	 return user;
 	}
-	
+	public Role getUserRoleByUserName(String username) {
+	Role role=	userRepository.getUSerRoleByUseName(username);
+		return role;
+	}
 	
 	public void saveUserNamePassword(String username,String password,String email) {
 		User user=new User();

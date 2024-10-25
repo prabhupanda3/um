@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fmt.Umd.Dto.LoginresponseDTO;
 import com.fmt.Umd.Dto.RegistrationDto;
 import com.fmt.Umd.model.Module;
+import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.User;
 import com.fmt.Umd.service.AuthenticationService;
 import com.fmt.Umd.service.MailService;
@@ -60,7 +61,8 @@ public class AuthenticationController {
 	   Set<Module> moduleset=roleService.getRolesByUserName(user.getUsername());
 	 // Set<Module> moduleset= moduleService.getModuleListBySetOfEndpoints(endpoints);
 		User user2=authenticationService.getUserByUserName(user.getUsername());
-		 loginresponseDTO=new LoginresponseDTO(user,token,moduleset);
+		Role role=authenticationService.getUserRoleByUserName(user2.getUsername());
+		 loginresponseDTO=new LoginresponseDTO(user,token,moduleset,role);
 		if(token!=null) {
           List<GrantedAuthority> authorities=(List<GrantedAuthority>)authentication.getAuthorities();
  
