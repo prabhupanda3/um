@@ -91,7 +91,6 @@ public class SicurityConfiguration {
 	    for(Module module:modules) {
 	    List<SubModule>	sabmodules=module.getSubModule();
 	    for(SubModule submodule:sabmodules) {
-	    	
 	    	endPoints.add(submodule.getEndpoint());
 	    }
 	    
@@ -109,8 +108,10 @@ public class SicurityConfiguration {
 		 * 
 		 * }
 		 */
-		 auth.mvcMatchers("/devicesummary/**","/userRole/**").hasRole("ADMIN");
-		 auth.mvcMatchers("/devicesummary/**","/userRole/**").hasRole("JUNIORENGINEER");
+		 
+			
+		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("ADMIN");	 
+		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("JUNIORENGINEER");	 
 
 	    auth.anyRequest().denyAll();
        });
@@ -119,18 +120,16 @@ public class SicurityConfiguration {
 	return http.build();
     }
    
-    
-
-   @Bean
-    public JwtAuthenticationConverter jwtAuthenticationConverter() {
-	JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter=new	JwtGrantedAuthoritiesConverter();
-	jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
-	jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
-	JwtAuthenticationConverter jwtAuthenticationConverter=	new JwtAuthenticationConverter();
-	jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-	return jwtAuthenticationConverter;
-    }
-
-
+ 
+	  @Bean public JwtAuthenticationConverter jwtAuthenticationConverter() {
+	  JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter=new
+	  JwtGrantedAuthoritiesConverter();
+	  jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("roles");
+	  jwtGrantedAuthoritiesConverter.setAuthorityPrefix("ROLE_");
+	  JwtAuthenticationConverter jwtAuthenticationConverter= new
+	  JwtAuthenticationConverter();
+	  jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(
+	  jwtGrantedAuthoritiesConverter); return jwtAuthenticationConverter; }
+	  
 
 }

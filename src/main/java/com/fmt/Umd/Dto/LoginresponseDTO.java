@@ -16,11 +16,10 @@ public class LoginresponseDTO {
 	
 	
 	
-	public LoginresponseDTO(User user, String token, Set<Module> module, Role role) {
+	public LoginresponseDTO(User user, String token, Role role) {
 		super();
 		this.user = user;
 		this.token = token;
-		this.module = module;
 		this.role = role;
 	}
 	public LoginresponseDTO() {

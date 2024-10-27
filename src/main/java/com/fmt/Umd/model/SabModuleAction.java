@@ -8,15 +8,17 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="moduleAction")
-public class ModuleAction {
+@Table(name="SabModuleAction")
+public class SabModuleAction {
 
 	    @Id
 	    @Column(name="action_id")
 		private Integer actionID;
+	    @Column
+	    private String moduleID;
 	    @OneToOne
-	    @JoinColumn(name="action_id_module_id")
-	    private Module module;
+	    @JoinColumn(name="action_id_submodule_id")
+	    private SubModule sabmodule;
 	    @Column(name="addition")
 	    private String add;
 	    @Column(name="edit")
@@ -25,17 +27,25 @@ public class ModuleAction {
 	    private String delete;
 	    @Column(name="view")
 	    private String view;
+
+		public String getModuleID() {
+			return moduleID;
+		}
+		public void setModuleID(String moduleID) {
+			this.moduleID = moduleID;
+		}
 		public Integer getActionID() {
 			return actionID;
 		}
 		public void setActionID(Integer actionID) {
 			this.actionID = actionID;
 		}
-		public Module getModule() {
-			return module;
+
+		public SubModule getSabmodule() {
+			return sabmodule;
 		}
-		public void setModule(Module module) {
-			this.module = module;
+		public void setSabmodule(SubModule sabmodule) {
+			this.sabmodule = sabmodule;
 		}
 		public String getAdd() {
 			return add;
