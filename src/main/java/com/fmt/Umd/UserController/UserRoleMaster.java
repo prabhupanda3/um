@@ -22,7 +22,6 @@ private RoleService roleService;
 	
 	@GetMapping("childRole")
 	public Set<Role> userChildRoleMaster(Principal principal) {
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities());
 
 		Set<Role> childrole=null;
 		try {
