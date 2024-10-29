@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
 import com.fmt.Umd.model.Module;
-import com.fmt.Umd.model.ModuleAction;
 import com.fmt.Umd.model.Role;
+import com.fmt.Umd.model.SabModuleAction;
 @Service
 public class RoleService {
 	
@@ -53,7 +53,7 @@ public class RoleService {
 		Set<Role>	rolesBasedOnParentRole=null;
 		try {
 			Role	role=userRepository.getUSerRoleByUseName(username);
-		Set<ModuleAction>	moduleActions=role.getModuleAction();
+		List<SabModuleAction>	moduleActions=role.getSabmoduleAction();
 				String authority=role.getAuthority();
 				rolesBasedOnParentRole=roleRepository.findAllByParentRole(authority);
 				

@@ -1,6 +1,7 @@
 package com.fmt.Umd.model;
 
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -10,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 
@@ -25,12 +25,12 @@ public class Role implements GrantedAuthority {
     private String authority;
     @Column
     private String roleDes;
-    @OneToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER)
     @JoinTable(joinColumns = {@JoinColumn(name="role_id")},
     inverseJoinColumns = {@JoinColumn(name="action_id")}
     )  
     @Column
-    private Set<ModuleAction> moduleAction;
+    private List<SabModuleAction> sabmoduleAction;
     @Column
     private String parentRole;
     @ManyToMany(fetch = FetchType.EAGER)
@@ -60,11 +60,13 @@ public class Role implements GrantedAuthority {
 		this.roleDes = roleDes;
 	}
 
-	public Set<ModuleAction> getModuleAction() {
-		return moduleAction;
+	
+	
+	public List<SabModuleAction> getSabmoduleAction() {
+		return sabmoduleAction;
 	}
-	public void setModuleAction(Set<ModuleAction> moduleAction) {
-		this.moduleAction = moduleAction;
+	public void setSabmoduleAction(List<SabModuleAction> sabmoduleAction) {
+		this.sabmoduleAction = sabmoduleAction;
 	}
 	public String getParentRole() {
 		return parentRole;
