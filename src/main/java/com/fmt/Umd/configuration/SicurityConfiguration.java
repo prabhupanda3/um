@@ -95,18 +95,21 @@ public class SicurityConfiguration {
 	    }
 	    
 	    }
-	    System.out.println("Authorty :"+role.getAuthority());
 	    authorityEndPointSet.put(role.getAuthority(), endPoints);
 	    }
 	    Set<String> AuthorityName=authorityEndPointSet.keySet();
+		/*
+		 * for(String authori:AuthorityName) {
+		 * System.out.println("Authority :"+authori+" Authority Endpoints:"+String.join(
+		 * ",",authorityEndPointSet.get(authori))); List<String> endpointsList=
+		 * authorityEndPointSet.get(authori); String[]
+		 * endpoints=endpointsList.toArray(new String[0]);
+		 * 
+		 * 
+		 * }
+		 */
+		 
 			
-			/*
-			 * for(String authori:AuthorityName) {
-			 * System.out.println("Authority Endpoints:"+String.join(",",
-			 * authorityEndPointSet.get(authori))); List<String> endpointsList=
-			 * authorityEndPointSet.get(authori); auth.mvcMatchers(endpointsList.toArray(new
-			 * String[0]).toString()).hasRole(authori); }
-			 */
 		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("ADMIN");	 
 		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("JUNIORENGINEER");	 
 

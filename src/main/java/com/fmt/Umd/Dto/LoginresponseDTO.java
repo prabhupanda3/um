@@ -3,6 +3,7 @@ package com.fmt.Umd.Dto;
 import java.util.Set;
 
 import com.fmt.Umd.model.Module;
+import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.User;
 
 public class LoginresponseDTO {
@@ -10,23 +11,22 @@ public class LoginresponseDTO {
 	private User user;
 	private String token;
 	private Set<Module> module;
+	private Role role;
 	
 	
+	
+	
+	public LoginresponseDTO(User user, String token, Role role) {
+		super();
+		this.user = user;
+		this.token = token;
+		this.role = role;
+	}
 	public LoginresponseDTO() {
 		super();
 	}
-	public LoginresponseDTO(User user, String token) {
-		super();
-		this.user = user;
-		this.token = token;
-	}
 	
-	public LoginresponseDTO(User user, String token, Set<Module> module) {
-		super();
-		this.user = user;
-		this.token = token;
-		this.module = module;
-	}
+	
 	public User getUser() {
 		return user;
 	}
@@ -44,6 +44,12 @@ public class LoginresponseDTO {
 	}
 	public void setModule(Set<Module> module) {
 		this.module = module;
+	}
+	public Role getRole() {
+		return role;
+	}
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	
