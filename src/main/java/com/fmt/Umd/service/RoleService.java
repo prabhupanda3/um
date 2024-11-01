@@ -65,7 +65,17 @@ public class RoleService {
 		}
 		
 	}
-	
+	public Role getModuleSubmodule(String userName){
+		Role role=null;
+		try {
+				role=userRepository.getUSerRoleByUseName(userName);
+			return role;
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return role;
+		}
+	}
 	
 	
 	
