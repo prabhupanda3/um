@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
@@ -42,15 +43,17 @@ private RoleService roleService;
 		}
 	}
 	@GetMapping("moduleSabmodule")
-	public Role getModulesByUserName(Principal principal){
+	public List<ModuleSabModuleActionDTO> getModulesByUserName(Principal principal){
 		Role role=null;
+		List<ModuleSabModuleActionDTO> msmad=null;
 		try {
-			return role;
-		
+			
+			msmad=roleService.getModuleSubmodule(principal.getName());
+			return msmad;
 	
 		}catch(Exception ex) {
 			ex.printStackTrace();
-			return role;
+			return msmad;
 
 		}
 	}
