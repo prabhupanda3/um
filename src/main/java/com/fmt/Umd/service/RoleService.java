@@ -8,18 +8,20 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
 import com.fmt.Umd.model.Module;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
+import com.fmt.Umd.model.SubModule;
 @Service
 public class RoleService {
 	
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-     public RoleRepository roleRepository;
+     private RoleRepository roleRepository;
 	
 	 public RoleService() {
 			super();
@@ -65,7 +67,31 @@ public class RoleService {
 		}
 		
 	}
-	
+	public List<ModuleSabModuleActionDTO> getModuleSubmodule(String userName){
+		List<ModuleSabModuleActionDTO> moduleDetails=new ArrayList<>();
+		Role role=null;
+		try {
+				role=userRepository.getUSerRoleByUseName(userName);
+			Set<Module>	modules=role.getModule();
+		List<SabModuleAction>	sabmoduleAction=role.getSabmoduleAction();
+			modules.stream().forEach((Module module)->{
+				;
+				module.getSubModule().stream().forEach((SubModule submodule)->{
+					sabmoduleAction.forEach((SabModuleAction sabModuleAction)->{
+						if(submodule.getSubmoduleId()==sabModuleAction.getSabmodule().getSubmoduleId()) {
+							moduleDetails.add(new ModuleSabModuleActionDTO(module.getModuleName(),submodule.getSubmoduleName(),sabModuleAction));
+						}
+					});
+				});
+
+			});
+			return moduleDetails;
+
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			return moduleDetails;
+		}
+	}
 	
 	
 	

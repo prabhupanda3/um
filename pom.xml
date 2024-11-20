@@ -108,6 +108,12 @@
     <artifactId>javax.mail</artifactId>
     <version>1.6.2</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/org.gurux/gurux.common -->
+<dependency>
+    <groupId>org.gurux</groupId>
+    <artifactId>gurux.common</artifactId>
+    <version>1.0.17</version>
+</dependency>
 
 
 <!--Lombok  -->
