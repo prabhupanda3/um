@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
-import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
+import com.fmt.Umd.Dto.RoleDTO;
 import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.SabModuleAction;
-import com.fmt.Umd.model.SubModule;
 import com.fmt.Umd.service.RoleService;
 
 @RestController
@@ -57,6 +55,27 @@ private RoleService roleService;
 
 		}
 	}
+	@GetMapping("childRoleforUser")
+public List<RoleDTO>	getRoleByParentRole(Principal principal){
+	Set<Role> roles=null;
+	List<RoleDTO> roledtos=new ArrayList<>();
+	try {
+	 roles=roleService.getGrantedAuthority(principal.getName());
+	 roles.forEach((Role role)->{
+		 RoleDTO roledto=new RoleDTO();
+		 roledto.setAuthorityName(role.getAuthority());
+		 roledto.setParentRole(role.getParentRole());
+		 roledto.setRoleDesc(role.getRoleDes());
+		 roledto.setRoleName(role.getRoleName());
+		 roledtos.add(roledto);
+	 });
+	 
+		return roledtos;
+	}catch(Exception ex) {
+		return roledtos;
+	}
+	
+}
 	
 	
 	
