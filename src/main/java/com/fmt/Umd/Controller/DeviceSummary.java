@@ -77,7 +77,7 @@ public class DeviceSummary {
 			Set<String> agMeterSet=new HashSet<>();
             Set<String> nonagMeterSet=new HashSet<>();
             Set<String> kv33set=new HashSet<>();
-System.out.println(mastersize.size());
+            System.out.println(mastersize.size());
 			mastersize.stream().forEach((TotalMasterData tm)->{
 			if(tm.getLocation_category().equals("AG")) {
 				agMeterSet.add(tm.getMeter_sl_no());

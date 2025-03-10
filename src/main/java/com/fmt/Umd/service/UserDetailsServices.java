@@ -1,13 +1,13 @@
 package com.fmt.Umd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Repository.UserRepository;
+import com.fmt.Umd.model.User;
 
 @Service
 
@@ -29,5 +29,13 @@ private UserRepository userRepository;
 			
 		
 	}
-	
+	public void getHierarchyByUserName(String userName) {
+		try {
+			User user=userRepository.findAllByUsername(userName);
+			user.getHierarchy();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
 }

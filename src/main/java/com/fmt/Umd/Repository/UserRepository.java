@@ -15,5 +15,6 @@ public Optional<User> findByUsername(String username);
 @Query("SELECT u.role FROM User u WHERE u.username = :username")
 public Role getUSerRoleByUseName(String username);
 User findByUsernameOrPasswordOrEmail(String username,String password,String email);
+User findAllByUsername(String username);
 
 }

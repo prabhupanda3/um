@@ -32,8 +32,6 @@ private RoleService roleService;
 		try {
 			String userName=principal.getName();
 			childrole=roleService.getGrantedAuthority(userName);
-			
-			
 			return childrole;	
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -56,7 +54,7 @@ private RoleService roleService;
 		}
 	}
 	@GetMapping("childRoleforUser")
-public List<RoleDTO>	getRoleByParentRole(Principal principal){
+    public List<RoleDTO>	getRoleByParentRole(Principal principal){
 	Set<Role> roles=null;
 	List<RoleDTO> roledtos=new ArrayList<>();
 	try {
@@ -76,8 +74,17 @@ public List<RoleDTO>	getRoleByParentRole(Principal principal){
 	}
 	
 }
-	
-	
+
+	@GetMapping("getHierarchyLevels")
+	public void getHierarchyByUserName(Principal principal) {
+		try {
+		String userName=	principal.getName();
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
 	
 	
 	

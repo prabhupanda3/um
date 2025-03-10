@@ -75,7 +75,7 @@ public class RoleService {
 			Set<Module>	modules=role.getModule();
 		List<SabModuleAction>	sabmoduleAction=role.getSabmoduleAction();
 			modules.stream().forEach((Module module)->{
-				;
+				
 				module.getSubModule().stream().forEach((SubModule submodule)->{
 					sabmoduleAction.forEach((SabModuleAction sabModuleAction)->{
 						if(submodule.getSubmoduleId()==sabModuleAction.getSabmodule().getSubmoduleId()) {
