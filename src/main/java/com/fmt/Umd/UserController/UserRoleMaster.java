@@ -8,6 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.Dto.RoleDTO;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.service.RoleService;
+import com.fmt.Umd.service.UserDetailsServices;
 
 @RestController
 @CrossOrigin(value = "http://localhost:4200")
@@ -24,6 +26,8 @@ import com.fmt.Umd.service.RoleService;
 public class UserRoleMaster {
 @Autowired
 private RoleService roleService;
+@Autowired
+private UserDetailsServices userDetailsServices;
 	
 	@GetMapping("childRole")
 	public Set<Role> userChildRoleMaster(Principal principal) {
@@ -45,6 +49,7 @@ private RoleService roleService;
 		try {
 			
 			msmad=roleService.getModuleSubmodule(principal.getName());
+			
 			return msmad;
 	
 		}catch(Exception ex) {
@@ -75,17 +80,28 @@ private RoleService roleService;
 	
 }
 
-	@GetMapping("getHierarchyLevels")
-	public void getHierarchyByUserName(Principal principal) {
+	@GetMapping("listOfChildRole")
+	public List<String> getHierarchyByUserName(Principal principal) {
+		List<String> hirarchyList=null;
 		try {
 		String userName=	principal.getName();
-		
+		hirarchyList=userDetailsServices.getAllListOfChildRoles(userName);
+		return hirarchyList;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return hirarchyList;
+	}
+	@PostMapping("roleCreation")
+	public void roleCreation(Role role) {
+		try {
+			
+			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 		
 	}
-	
 	
 	
 }
