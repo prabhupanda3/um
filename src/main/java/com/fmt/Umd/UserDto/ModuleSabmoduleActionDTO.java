@@ -1,7 +1,5 @@
 package com.fmt.Umd.UserDto;
 
-import java.util.Set;
-
 import com.fmt.Umd.model.SabModuleAction;
 
 public class ModuleSabmoduleActionDTO {
