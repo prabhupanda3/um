@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
+import com.fmt.Umd.Dto.RoleDTO;
+import com.fmt.Umd.Repository.ModuleRepository;
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
+import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
 import com.fmt.Umd.model.Module;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
@@ -22,7 +25,8 @@ public class RoleService {
 	private UserRepository userRepository;
 	@Autowired
      private RoleRepository roleRepository;
-	
+	@Autowired
+	private ModuleRepository moduleRepository;
 	 public RoleService() {
 			super();
 		}
@@ -93,7 +97,27 @@ public class RoleService {
 		}
 	}
 	
-	
+        public void createUserRole(RoleDTO roledto ){
+		      try {
+		    	  Role role=new Role();
+		    	  role.setAuthority(roledto.getAuthority());
+		    	  role.setParentRole(roledto.getParentRole());
+		    	  role.setRoleDes(roledto.getRoleDesc());
+		    	  role.setRoleName(roledto.getRoleName());	
+		    List<ModuleSabmoduleActionDTO>	 listofaction= roledto.getModuleSabmoduleActionDTO();
+		    Set<Module> moduleToBeAdded=new HashSet<>();
+		    List<SabModuleAction> sabModuleAction=new ArrayList<>();
+		    listofaction.forEach((ModuleSabmoduleActionDTO msad)->{
+		            sabModuleAction.add(msad.getSabModuleAction());
+		    	Set<Module> modules=moduleRepository.findModuleByModuleName(msad.getModuleName());
+		    	modules.forEach((Module module)->moduleToBeAdded.add(module));
+		    });
+		    role.setModule(moduleToBeAdded);
+		    roleRepository.save(role);
+		      }catch(Exception ex) {
+			     ex.printStackTrace();
+		       }
+	}
 	
 	}
 	

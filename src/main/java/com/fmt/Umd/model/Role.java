@@ -7,17 +7,21 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.GeneratorType;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity 
 public class Role implements GrantedAuthority {
     @Id
     @Column(name="role_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer roleId;
     @Column
     private String roleName;

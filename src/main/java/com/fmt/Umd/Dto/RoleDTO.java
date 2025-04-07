@@ -1,19 +1,28 @@
 package com.fmt.Umd.Dto;
 
+import java.util.List;
+
+import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
+
 public class RoleDTO {
 
 	public RoleDTO() {
 		// TODO Auto-generated constructor stub
 	}
-	private String authorityName;
+	private String authority;
 	private String roleName;
 	private String parentRole;
 	private String roleDesc;
-	public String getAuthorityName() {
-		return authorityName;
+	private List<ModuleSabmoduleActionDTO> moduleSabmoduleActionDTO;
+	
+	
+	
+	
+	public String getAuthority() {
+		return authority;
 	}
-	public void setAuthorityName(String authorityName) {
-		this.authorityName = authorityName;
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 	public String getRoleName() {
 		return roleName;
@@ -32,6 +41,12 @@ public class RoleDTO {
 	}
 	public void setRoleDesc(String roleDesc) {
 		this.roleDesc = roleDesc;
+	}
+	public List<ModuleSabmoduleActionDTO> getModuleSabmoduleActionDTO() {
+		return moduleSabmoduleActionDTO;
+	}
+	public void setModuleSabmoduleActionDTO(List<ModuleSabmoduleActionDTO> moduleSabmoduleActionDTO) {
+		this.moduleSabmoduleActionDTO = moduleSabmoduleActionDTO;
 	}
 	
 	

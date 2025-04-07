@@ -14,4 +14,5 @@ import com.fmt.Umd.model.Module;
 public interface ModuleRepository extends JpaRepository<Module,Integer>{
     @Query("SELECT m FROM Module m , SubModule sm WHERE sm.endpoint IN (:endpoints) and (sm.activeFlag=true and m.activeFlag=true)")
 public Set<Module> findModulesWithSubModules(Set<String> endpoints);
+   public Set<Module> findModuleByModuleName(String moduleName);
 }

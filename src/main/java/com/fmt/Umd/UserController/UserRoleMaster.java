@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,7 +67,7 @@ private UserDetailsServices userDetailsServices;
 	 roles=roleService.getGrantedAuthority(principal.getName());
 	 roles.forEach((Role role)->{
 		 RoleDTO roledto=new RoleDTO();
-		 roledto.setAuthorityName(role.getAuthority());
+		 roledto.setAuthority(role.getAuthority());
 		 roledto.setParentRole(role.getParentRole());
 		 roledto.setRoleDesc(role.getRoleDes());
 		 roledto.setRoleName(role.getRoleName());
@@ -93,9 +94,9 @@ private UserDetailsServices userDetailsServices;
 		return hirarchyList;
 	}
 	@PostMapping("roleCreation")
-	public void roleCreation(Role role) {
+	public void roleCreation(@RequestBody RoleDTO role) {
 		try {
-			
+			roleService.createUserRole(role);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
