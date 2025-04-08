@@ -69,7 +69,7 @@ private UserDetailsServices userDetailsServices;
 		 RoleDTO roledto=new RoleDTO();
 		 roledto.setAuthority(role.getAuthority());
 		 roledto.setParentRole(role.getParentRole());
-		 roledto.setRoleDesc(role.getRoleDes());
+		 roledto.setRoleDes(role.getRoleDes());
 		 roledto.setRoleName(role.getRoleName());
 		 roledtos.add(roledto);
 	 });

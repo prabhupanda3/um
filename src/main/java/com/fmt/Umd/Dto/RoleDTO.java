@@ -12,7 +12,7 @@ public class RoleDTO {
 	private String authority;
 	private String roleName;
 	private String parentRole;
-	private String roleDesc;
+	private String roleDes;
 	private List<ModuleSabmoduleActionDTO> moduleSabmoduleActionDTO;
 	
 	
@@ -36,17 +36,18 @@ public class RoleDTO {
 	public void setParentRole(String parentRole) {
 		this.parentRole = parentRole;
 	}
-	public String getRoleDesc() {
-		return roleDesc;
-	}
-	public void setRoleDesc(String roleDesc) {
-		this.roleDesc = roleDesc;
-	}
+	
 	public List<ModuleSabmoduleActionDTO> getModuleSabmoduleActionDTO() {
 		return moduleSabmoduleActionDTO;
 	}
 	public void setModuleSabmoduleActionDTO(List<ModuleSabmoduleActionDTO> moduleSabmoduleActionDTO) {
 		this.moduleSabmoduleActionDTO = moduleSabmoduleActionDTO;
+	}
+	public String getRoleDes() {
+		return roleDes;
+	}
+	public void setRoleDes(String roleDes) {
+		this.roleDes = roleDes;
 	}
 	
 	
