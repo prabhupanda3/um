@@ -116,24 +116,31 @@ public class RoleService {
 		    List<SabModuleAction> sabModuleActions=new ArrayList<>();
 		    listofaction.forEach((ModuleSabmoduleActionDTO msad)->{
 			        SabModuleAction SabModuleAction=new SabModuleAction();
-		            sabModuleActions.add(msad.getSabModuleAction());
+		            
 		    	    Set<Module> modules=moduleRepository.findModuleByModuleName(msad.getModuleName());
 		    	    modules.forEach((Module module)->{
 		    	    	                   moduleToBeAdded.add(module);
 		    	    	                   SabModuleAction.setModuleID(Integer.toString(module.getModuleId()));	                   
 		    	    });
 		    	    List<SubModule>    sabModules=sabModuleRepository.findSubmoduleBysubmoduleName(msad.getSabmoduleName());
-		    	    sabModules.forEach((SubModule sabmodule)->Integer.toString(sabmodule.getSubmoduleId()));
+		    	    sabModules.forEach((SubModule sabmodule)->
+		    	    {
+		    	    Integer.toString(sabmodule.getSubmoduleId());
+		    	    SabModuleAction.setSabmodule(sabmodule);
+		    	    
+		    	    });
 		    	    SabModuleAction sabModuleAction1=  msad.getSabModuleAction();
 		    	    SabModuleAction.setAdd( sabModuleAction1.getAdd());
 		    	    SabModuleAction.setDelete( sabModuleAction1.getDelete());
 		    	    SabModuleAction.setEdit(sabModuleAction1.getEdit());
 		    	    SabModuleAction.setView( sabModuleAction1.getView());
 		    	    sabModuleActionList.add(SabModuleAction);
+		    	    sabModuleActions.add(sabModuleAction1);
 		    	    
 		    });
 		    role.setSabmoduleAction(sabModuleActionList);
 		    role.setModule(moduleToBeAdded);
+		    sabModuleActionRepository.saveAll(sabModuleActionList);
 		    roleRepository.save(role);
 		      }catch(Exception ex) {
 			     ex.printStackTrace();
