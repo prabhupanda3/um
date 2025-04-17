@@ -168,7 +168,7 @@ public class MDMReciverService {
 			//lsdastbl.setPhase_supply("");
 			//lsdastbl.setEnergy_utilised("");
 			//lsdastbl.setEnergy_saved("");
-			lsdastbl.setD4_TIME_STAMP(new Timestamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(d4data.getD4timeStamp()).getTime()));
+			//lsdastbl.setD4_TIME_STAMP(new Timestamp(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(d4data.getD4timeStamp()).getTime()));
 			lsDataStblRepository.save(lsdastbl);
 			
 		}catch(Exception ex) {

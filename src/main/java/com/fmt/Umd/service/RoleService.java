@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.Dto.RoleDTO;
+import com.fmt.Umd.Repository.HierarchyMasterRepository;
 import com.fmt.Umd.Repository.ModuleRepository;
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.SabModuleActionRepository;
 import com.fmt.Umd.Repository.SabModuleRepository;
 import com.fmt.Umd.Repository.UserRepository;
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
+import com.fmt.Umd.model.HierarchyMaster;
 import com.fmt.Umd.model.Module;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
@@ -33,6 +35,8 @@ public class RoleService {
 	private SabModuleRepository sabModuleRepository;
 	@Autowired
 	private SabModuleActionRepository sabModuleActionRepository;
+	@Autowired
+	private HierarchyMasterRepository hierarchyMasterRepository;
 	 public RoleService() {
 			super();
 		}
@@ -147,6 +151,14 @@ public class RoleService {
 		       }
 	}
 	
+        
+        public List<String> getHierarchyDetails(){
+        	List<String> hierarchyList=hierarchyMasterRepository.findHierarchyTitle();
+        	return hierarchyList;
+        	
+        }
+        
+        
 	}
 	
 	

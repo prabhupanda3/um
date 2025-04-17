@@ -103,6 +103,14 @@ private UserDetailsServices userDetailsServices;
 		}
 		
 	}
-	
-	
+	@GetMapping("hierarchyList")
+	public List<String>  getHierarchyList() {
+		List<String> hierarchyList=null;
+		try {
+			hierarchyList=roleService.getHierarchyDetails();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return hierarchyList;
+	}
 }
