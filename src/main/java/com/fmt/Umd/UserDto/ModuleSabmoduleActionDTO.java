@@ -6,6 +6,12 @@ public class ModuleSabmoduleActionDTO {
 	private String moduleName;
 	private String sabmoduleName;
 	private SabModuleAction sabModuleAction;
+	
+	
+	
+	public ModuleSabmoduleActionDTO() {
+		super();
+	}
 	public ModuleSabmoduleActionDTO(String moduleName, String sabmoduleName, SabModuleAction sabModuleAction) {
 		super();
 		this.moduleName = moduleName;

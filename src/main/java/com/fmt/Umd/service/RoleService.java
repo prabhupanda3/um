@@ -17,7 +17,6 @@ import com.fmt.Umd.Repository.SabModuleActionRepository;
 import com.fmt.Umd.Repository.SabModuleRepository;
 import com.fmt.Umd.Repository.UserRepository;
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
-import com.fmt.Umd.model.HierarchyMaster;
 import com.fmt.Umd.model.Module;
 import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
@@ -71,8 +70,11 @@ public class RoleService {
 			Role	role=userRepository.getUSerRoleByUseName(username);
 		List<SabModuleAction>	moduleActions=role.getSabmoduleAction();
 				String authority=role.getAuthority();
-				rolesBasedOnParentRole=roleRepository.findAllByParentRole(authority);
 				
+			List<String>	autheriryList=roleRepository.findAuthorityByParentRole(authority);
+			                //autheriryList.add(authority);
+			            System.out.println("Array list"+autheriryList.toString());    
+						rolesBasedOnParentRole=roleRepository.findAllByParentRoleIn(autheriryList);
 				return rolesBasedOnParentRole;
 
 		}catch(Exception ex) {
@@ -107,7 +109,8 @@ public class RoleService {
 		}
 	}
 	
-        public void createUserRole(RoleDTO roledto ){
+        public RoleDTO createUserRole(RoleDTO roledto ){
+        	RoleDTO roledtosuccess=new RoleDTO();
 		      try {
 		    	  Role role=new Role();
 		    	  role.setAuthority(roledto.getAuthority());
@@ -129,7 +132,6 @@ public class RoleService {
 		    	    List<SubModule>    sabModules=sabModuleRepository.findSubmoduleBysubmoduleName(msad.getSabmoduleName());
 		    	    sabModules.forEach((SubModule sabmodule)->
 		    	    {
-		    	    Integer.toString(sabmodule.getSubmoduleId());
 		    	    SabModuleAction.setSabmodule(sabmodule);
 		    	    
 		    	    });
@@ -144,11 +146,15 @@ public class RoleService {
 		    });
 		    role.setSabmoduleAction(sabModuleActionList);
 		    role.setModule(moduleToBeAdded);
-		    sabModuleActionRepository.saveAll(sabModuleActionList);
-		    roleRepository.save(role);
+		   
+			   Role rolesuccess= roleRepository.save(role);
+			   roledtosuccess.setAuthority(rolesuccess.getRoleName());
+
+		   
 		      }catch(Exception ex) {
 			     ex.printStackTrace();
 		       }
+		      return roledtosuccess;
 	}
 	
         
@@ -157,6 +163,68 @@ public class RoleService {
         	return hierarchyList;
         	
         }
+        
+        public Role getRoleDetailsModuleSubmodule(String autherityName) {
+        	Role role=null;
+        	try {
+        		role=roleRepository.findAllByAuthority(autherityName);
+        	}catch(Exception ex) {
+        		ex.printStackTrace();
+        	}
+        	return role;
+        }
+        
+        public Role updateRoleSubmoduleAction(RoleDTO roledto) {
+        Role rl=null;	
+        	try {
+        		String authority=roledto.getAuthority();
+        		Role role=roleRepository.findAllByAuthority(authority);
+        		
+        		role.setAuthority(authority);
+        		role.setParentRole(roledto.getParentRole());
+        		role.setRoleDes(roledto.getRoleDes());
+        		role.setRoleName(roledto.getRoleName());
+                List<ModuleSabmoduleActionDTO> msad=roledto.getModuleSabmoduleActionDTO();
+                List<SabModuleAction> submoduleactions=role.getSabmoduleAction();
+                msad.forEach((ModuleSabmoduleActionDTO moduleSabmoduleActionDTO)->{	
+                	Set<Module> modules=role.getModule();
+                	modules.forEach((Module module)->{
+                		if(moduleSabmoduleActionDTO.getModuleName().equals(module.getModuleName())) {
+                		List<SubModule> submodules=	module.getSubModule();
+                		submodules.forEach((SubModule submodule)->{
+                			List<SabModuleAction> sabModuleActions=new ArrayList<>();
+                			submoduleactions.forEach((SabModuleAction sabModuleAction)->{
+                				if(submodule==sabModuleAction.getSabmodule()) {
+                					SabModuleAction sabModuleAction1=new SabModuleAction();
+                					sabModuleAction1.setActionID(sabModuleAction.getActionID());
+                					sabModuleAction1.setModuleID(Integer.toString(module.getModuleId()));
+                					sabModuleAction1.setSabmodule(submodule);
+                					sabModuleAction1.setAdd(moduleSabmoduleActionDTO.getSabModuleAction().getAdd());
+                					sabModuleAction1.setDelete(moduleSabmoduleActionDTO.getSabModuleAction().getDelete());
+                					sabModuleAction1.setEdit(moduleSabmoduleActionDTO.getSabModuleAction().getEdit());
+                					sabModuleAction1.setView(moduleSabmoduleActionDTO.getSabModuleAction().getView());
+                					sabModuleActions.add(sabModuleAction1);
+                					
+                				}
+                			});
+                			role.setSabmoduleAction(sabModuleActions);
+                			
+                		});
+                		}
+                	});
+                });
+                
+                rl=roleRepository.save(role); 
+        	
+        	}catch(Exception ex) {
+        		ex.printStackTrace();
+        	}
+        	return rl;
+        	
+        }
+        
+        
+        
         
         
 	}

@@ -4,6 +4,7 @@ package com.fmt.Umd.model;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -25,11 +26,11 @@ public class Role implements GrantedAuthority {
 	private Integer roleId;
     @Column
     private String roleName;
-    @Column
+    @Column(unique = true)
     private String authority;
     @Column
     private String roleDes;
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     @JoinTable(joinColumns = {@JoinColumn(name="role_id")},
     inverseJoinColumns = {@JoinColumn(name="action_id")}
     )  
