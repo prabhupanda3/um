@@ -2,6 +2,7 @@ package com.fmt.Umd.UserController;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -102,18 +103,20 @@ private UserDetailsServices userDetailsServices;
 		return hirarchyList;
 	}
 	@PostMapping("roleCreation")
-	public ResponseEntity<Map<String, String>>  roleCreation(@RequestBody RoleDTO role) {
-		RoleDTO roles=null;
-		try {
-			 roles=roleService.createUserRole(role);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message","ROle "+roles.getAuthority()+" Created Successfully"));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","ROle "+roles.getAuthority()+" Can not be created successfully"));
-
-		}
-		
+	public ResponseEntity<Map<String, String>> roleCreation(@RequestBody RoleDTO role) {
+	    RoleDTO roles = null;
+	    Map<String, String> hs = new HashMap<>();
+	    try {
+	        roles = roleService.createUserRole(role);
+	        hs.put("message", "Role " + roles.getAuthority() + " created successfully");
+	        return ResponseEntity.status(HttpStatus.CREATED).body(hs);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        hs.put("message", "Role " + (roles != null ? roles.getAuthority() : role.getAuthority()) + " could not be created successfully");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(hs);
+	    }
 	}
+
 	@GetMapping("hierarchyList")
 	public List<String>  getHierarchyList() {
 		List<String> hierarchyList=null;
@@ -187,17 +190,21 @@ private UserDetailsServices userDetailsServices;
 		return roleDTO;
 	}
 	@PutMapping("updateUserRole")
-	public ResponseEntity<Map<String, String>>  updareRole(@RequestBody RoleDTO roleDTO) {
-		Role role=null;
-		try {
-			role=roleService.updateRoleSubmoduleAction(roleDTO);
-            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message","ROle "+role.getAuthority()+" Updated Successfully"));
-		}catch(Exception ex) {
-			ex.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","ROle "+role.getAuthority()+" Can not be update"));
-
-		}
+	public ResponseEntity<Map<String, String>> updateRole(@RequestBody RoleDTO roleDTO) {
+	    Role role = null;
+	    Map<String, String> hs = new HashMap<>();
+	    try {
+	        role = roleService.updateRoleSubmoduleAction(roleDTO);
+	        hs.put("message", "Role " + role.getAuthority() + " updated successfully");
+	        return ResponseEntity.status(HttpStatus.OK).body(hs);
+	    } catch (Exception ex) {
+	        ex.printStackTrace();
+	        String authority = (role != null) ? role.getAuthority() : roleDTO.getAuthority();
+	        hs.put("message", "Role " + authority + " could not be updated");
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(hs);
+	    }
 	}
+
 	@DeleteMapping("roleDelete/{autherityName}")
 	public void deleteRole(@PathVariable("autherityName")String autherityName) {
 		try {
