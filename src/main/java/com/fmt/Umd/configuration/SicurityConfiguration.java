@@ -38,6 +38,7 @@ import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 
+import cm.fmt.Umd.util.DynamicAuthorizationManager;
 import cm.fmt.Umd.util.RSAKeyProperties;
 
 @Configuration
@@ -77,43 +78,12 @@ public class SicurityConfiguration {
 	return new ProviderManager(daoAuthenticationProvider);
      }
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http,DynamicAuthorizationManager dynamicAuthManager) throws Exception{
 	http.csrf(csrf->csrf.disable()).cors().and().authorizeHttpRequests(auth->{
 		
-		auth.mvcMatchers("/auth/**").permitAll();
-	    List<Role>	roles=roleService.getAllRoles();
-	    String authority="";
-	    Map<String,List<String>> authorityEndPointSet=new HashMap<>();
-	    List<String> endPoints=new ArrayList<>();
-	    for(Role role:roles) {
-	    	
-	    Set<Module> modules=role.getModule();
-	    for(Module module:modules) {
-	    List<SubModule>	sabmodules=module.getSubModule();
-	    for(SubModule submodule:sabmodules) {
-	    	endPoints.add(submodule.getEndpoint());
-	    }
-	    
-	    }
-	    authorityEndPointSet.put(role.getAuthority(), endPoints);
-	    }
-	    Set<String> AuthorityName=authorityEndPointSet.keySet();
-		/*
-		 * for(String authori:AuthorityName) {
-		 * System.out.println("Authority :"+authori+" Authority Endpoints:"+String.join(
-		 * ",",authorityEndPointSet.get(authori))); List<String> endpointsList=
-		 * authorityEndPointSet.get(authori); String[]
-		 * endpoints=endpointsList.toArray(new String[0]);
-		 * 
-		 * 
-		 * }
-		 */
-		 
-			
-		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("ADMIN");	 
-		auth.mvcMatchers("/usermanagement/**","/userRole/**","/devicesummary/**").hasRole("JUNIORENGINEER");	 
-
-	    auth.anyRequest().denyAll();
+		auth.mvcMatchers("/auth/**").permitAll()
+		.anyRequest().access(dynamicAuthManager);
+	  
        });
 	http.oauth2ResourceServer().jwt().jwtAuthenticationConverter(jwtAuthenticationConverter());
 	http.sessionManagement(seession->seession.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

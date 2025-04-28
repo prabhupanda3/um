@@ -16,6 +16,9 @@ public interface RoleRepository extends JpaRepository<Role, Integer>{
 	public List<String> findParentRoleByRoleName(String roleName);
 	public Set<Role> findAllByParentRoleIn(List<String> authority);
     public Role	findAllByAuthority(String authorityName);
+    @Query("SELECT r.authority FROM Role r WHERE r.parentRole IN :authority")
+	List<String> findAuthorityByParentRoleIn(List<String> authority);
+    
 
 
 }

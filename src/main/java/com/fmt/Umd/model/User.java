@@ -23,7 +23,10 @@ public class User implements UserDetails{
 	@Column(name="user_id")
 	private Integer user_id;
 	@Column
+	private String userIdName;
+	@Column
 	private String password;
+	
 	@Column(unique=true)
 	private String username; 
 	@Column
@@ -32,7 +35,10 @@ public class User implements UserDetails{
 	private String email;
 	@Column(unique=true)
 	private String OTP;
-	
+	@Column
+	private String mobileNumber;
+	@Column
+	private String address;
 	@Column
 	private String hierarchy;
 
@@ -44,7 +50,8 @@ public class User implements UserDetails{
 	 private Set<Role> role;
 	@Column
 	private String verify;
-	
+	@Column
+	private String Image;
 	
 	public User() {
 		super();
@@ -106,9 +113,6 @@ public class User implements UserDetails{
 	public void setVerify(String verify) {
 		this.verify = verify;
 	}
-	
-
-	
 
 	public String getHierarchy() {
 		return hierarchy;
@@ -118,6 +122,37 @@ public class User implements UserDetails{
 		this.hierarchy = hierarchy;
 	}
 
+	public String getUserIdName() {
+		return userIdName;
+	}
+
+	public void setUserIdName(String userIdName) {
+		this.userIdName = userIdName;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getImage() {
+		return Image;
+	}
+
+	public void setImage(String image) {
+		Image = image;
+	}
 
 	@Override
 	public boolean isAccountNonExpired() {

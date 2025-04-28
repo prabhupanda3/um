@@ -21,7 +21,7 @@ public class SabModuleAction {
 		private Integer actionID;
 	    @Column
 	    private String moduleID;
-	    @OneToOne(cascade = CascadeType.ALL)
+	    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	    @JoinColumn(name="action_id_submodule_id")
 	    private SubModule sabmodule;
 	    @Column(name="addition")
@@ -33,6 +33,16 @@ public class SabModuleAction {
 	    @Column(name="view")
 	    private String view;
 
+		public SabModuleAction() {
+			super();
+		}
+		public SabModuleAction(String add, String edit, String delete, String view) {
+			super();
+			this.add = add;
+			this.edit = edit;
+			this.delete = delete;
+			this.view = view;
+		}
 		public String getModuleID() {
 			return moduleID;
 		}

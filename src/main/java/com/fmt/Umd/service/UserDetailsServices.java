@@ -51,8 +51,8 @@ private RoleRepository roleRepository;
 			User user=userRepository.findAllByUsername(userName);
 		Set<Role>	role=user.getRole();
 		for(Role r:role) {
-			r.getRoleName();
-			roleList=roleRepository.findParentRoleByRoleName(userName);
+			roleList=roleRepository.findParentRoleByRoleName(r.getRoleName());
+			roleList.add(r.getRoleName());
 		}
 		return roleList;
 
@@ -62,4 +62,16 @@ private RoleRepository roleRepository;
 		return roleList;
 		
 	}
+	
+	public void saveUserDetails(User user) {
+		try {
+			userRepository.save(user);
+			
+		   
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
 }

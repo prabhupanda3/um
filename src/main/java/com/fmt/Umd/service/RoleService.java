@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.Dto.RoleDTO;
@@ -67,13 +68,13 @@ public class RoleService {
 	public Set<Role> getGrantedAuthority(String username){
 		Set<Role>	rolesBasedOnParentRole=null;
 		try {
-			Role	role=userRepository.getUSerRoleByUseName(username);
-		List<SabModuleAction>	moduleActions=role.getSabmoduleAction();
-				String authority=role.getAuthority();
+		  	Role role=userRepository.getUSerRoleByUseName(username);
+	     	List<SabModuleAction>	moduleActions=role.getSabmoduleAction();
+			String authority=role.getAuthority();
 				
-			List<String>	autheriryList=roleRepository.findAuthorityByParentRole(authority);
-			                //autheriryList.add(authority);
-			            System.out.println("Array list"+autheriryList.toString());    
+			List<String> autheriryList=roleRepository.findAuthorityByParentRole(authority);
+			            autheriryList.add(authority);
+			 System.out.println("Array list"+autheriryList.toString());    
 						rolesBasedOnParentRole=roleRepository.findAllByParentRoleIn(autheriryList);
 				return rolesBasedOnParentRole;
 
@@ -83,8 +84,8 @@ public class RoleService {
 		}
 		
 	}
-	public List<ModuleSabModuleActionDTO> getModuleSubmodule(String userName){
-		List<ModuleSabModuleActionDTO> moduleDetails=new ArrayList<>();
+	public List<ModuleSabmoduleActionDTO> getModuleSubmodule(String userName){
+		List<ModuleSabmoduleActionDTO> moduleDetails=new ArrayList<>();
 		Role role=null;
 		try {
 				role=userRepository.getUSerRoleByUseName(userName);
@@ -95,7 +96,7 @@ public class RoleService {
 				module.getSubModule().stream().forEach((SubModule submodule)->{
 					sabmoduleAction.forEach((SabModuleAction sabModuleAction)->{
 						if(submodule.getSubmoduleId()==sabModuleAction.getSabmodule().getSubmoduleId()) {
-							moduleDetails.add(new ModuleSabModuleActionDTO(module.getModuleName(),submodule.getSubmoduleName(),sabModuleAction));
+							moduleDetails.add(new ModuleSabmoduleActionDTO(module.getModuleName(),submodule.getSubmoduleName(),sabModuleAction));
 						}
 					});
 				});
@@ -108,7 +109,30 @@ public class RoleService {
 			return moduleDetails;
 		}
 	}
-	
+	// ModuleSubmoduleaction by autherity
+	public List<ModuleSabmoduleActionDTO> getModulActionByAutherity(String autherityName) {
+		List<ModuleSabmoduleActionDTO> moduleDetails=new ArrayList<>();
+		Role role=null;
+		try {
+			 role=roleRepository.findAllByAuthority(autherityName);
+			Set<Module>	modules=role.getModule();
+			List<SabModuleAction>	sabmoduleAction=role.getSabmoduleAction();
+				modules.stream().forEach((Module module)->{
+					
+					module.getSubModule().stream().forEach((SubModule submodule)->{
+						sabmoduleAction.forEach((SabModuleAction sabModuleAction)->{
+							if(submodule.getSubmoduleId()==sabModuleAction.getSabmodule().getSubmoduleId()) {
+								moduleDetails.add(new ModuleSabmoduleActionDTO(module.getModuleName(),submodule.getSubmoduleName(),sabModuleAction));
+							}
+						});
+					});
+
+				});
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return moduleDetails;
+	}
         public RoleDTO createUserRole(RoleDTO roledto ){
         	RoleDTO roledtosuccess=new RoleDTO();
 		      try {
@@ -222,6 +246,33 @@ public class RoleService {
         	return rl;
         	
         }
+        @Transactional
+		public void deleteRoleSubmoduleAction(String autherityName) {
+			// TODO Auto-generated method stub
+			try {
+				Set<Role> roles=roleRepository.findByAuthority(autherityName);
+				roles.forEach((Role role)->{
+					roleRepository.deleteById(role.getRoleId());
+				});
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			
+		}
+		public List<String> getAllChildAutherityByUserName(String userName) {
+			// TODO Auto-generated method stub
+			 List<String> listOfAutherity=null;
+			try {
+				Role role=userRepository.getUSerRoleByUseName(userName);
+	            List<String> autherites=roleRepository.findAuthorityByParentRole(role.getAuthority());
+	            autherites.add(role.getAuthority());
+	            listOfAutherity=roleRepository.findAuthorityByParentRoleIn(autherites);
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			return listOfAutherity;
+			
+		}
         
         
         

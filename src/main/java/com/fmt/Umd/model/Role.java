@@ -38,7 +38,7 @@ public class Role implements GrantedAuthority {
     private List<SabModuleAction> sabmoduleAction;
     @Column
     private String parentRole;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.DETACH})
     @JoinTable(joinColumns = {@JoinColumn(name="role_id")},
     inverseJoinColumns = {@JoinColumn(name="module_id")}
     )
