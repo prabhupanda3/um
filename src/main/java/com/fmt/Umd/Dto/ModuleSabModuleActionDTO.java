@@ -6,6 +6,11 @@ public class ModuleSabModuleActionDTO {
 private String moduleName;
 private String subModuleName;
 private SabModuleAction SabModuleAction;
+
+
+public ModuleSabModuleActionDTO() {
+	super();
+}
 public ModuleSabModuleActionDTO(String moduleName, String subModuleName,
 		com.fmt.Umd.model.SabModuleAction sabModuleAction) {
 	super();

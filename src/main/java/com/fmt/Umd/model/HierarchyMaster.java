@@ -14,7 +14,7 @@ public class HierarchyMaster {
 	@Column(name="hierarchy_type_id")
 	private int HierarchyTypeId;
 	@Column(name="hierarchy_title")
-	private int hierarchyTitle;
+	private String hierarchyTitle;
 	@Column(name="clientId")
 	private int clientId;
 	@Column(name="title_desc")
@@ -30,7 +30,8 @@ public class HierarchyMaster {
 	
 	
 	
-	public HierarchyMaster(int id, int hierarchyTypeId, int hierarchyTitle, int clientId, String titleString,
+	
+	public HierarchyMaster(int id, int hierarchyTypeId, String hierarchyTitle, int clientId, String titleString,
 			int parentTitleId, int activeFlag, String deviceLocation) {
 		super();
 		this.id = id;
@@ -41,6 +42,9 @@ public class HierarchyMaster {
 		this.parentTitleId = parentTitleId;
 		this.activeFlag = activeFlag;
 		this.deviceLocation = deviceLocation;
+	}
+	public void setHierarchyTitle(String hierarchyTitle) {
+		this.hierarchyTitle = hierarchyTitle;
 	}
 	public int getId() {
 		return id;
@@ -54,12 +58,7 @@ public class HierarchyMaster {
 	public void setHierarchyTypeId(int hierarchyTypeId) {
 		HierarchyTypeId = hierarchyTypeId;
 	}
-	public int getHierarchyTitle() {
-		return hierarchyTitle;
-	}
-	public void setHierarchyTitle(int hierarchyTitle) {
-		this.hierarchyTitle = hierarchyTitle;
-	}
+	
 	public int getClientId() {
 		return clientId;
 	}

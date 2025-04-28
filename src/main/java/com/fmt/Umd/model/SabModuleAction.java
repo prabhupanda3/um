@@ -1,7 +1,10 @@
 package com.fmt.Umd.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -13,10 +16,12 @@ public class SabModuleAction {
 
 	    @Id
 	    @Column(name="action_id")
+		@GeneratedValue(strategy = GenerationType.AUTO)
+
 		private Integer actionID;
 	    @Column
 	    private String moduleID;
-	    @OneToOne
+	    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
 	    @JoinColumn(name="action_id_submodule_id")
 	    private SubModule sabmodule;
 	    @Column(name="addition")
@@ -28,6 +33,16 @@ public class SabModuleAction {
 	    @Column(name="view")
 	    private String view;
 
+		public SabModuleAction() {
+			super();
+		}
+		public SabModuleAction(String add, String edit, String delete, String view) {
+			super();
+			this.add = add;
+			this.edit = edit;
+			this.delete = delete;
+			this.view = view;
+		}
 		public String getModuleID() {
 			return moduleID;
 		}

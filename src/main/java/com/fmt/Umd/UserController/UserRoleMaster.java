@@ -2,19 +2,28 @@ package com.fmt.Umd.UserController;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
 import com.fmt.Umd.Dto.RoleDTO;
+import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
 import com.fmt.Umd.model.Role;
+import com.fmt.Umd.model.SabModuleAction;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.UserDetailsServices;
 
@@ -43,9 +52,9 @@ private UserDetailsServices userDetailsServices;
 		}
 	}
 	@GetMapping("moduleSabmodule")
-	public List<ModuleSabModuleActionDTO> getModulesByUserName(Principal principal){
+	public List<ModuleSabmoduleActionDTO> getModulesByUserName(Principal principal){
 		Role role=null;
-		List<ModuleSabModuleActionDTO> msmad=null;
+		List<ModuleSabmoduleActionDTO> msmad=null;
 		try {
 			
 			msmad=roleService.getModuleSubmodule(principal.getName());
@@ -66,9 +75,9 @@ private UserDetailsServices userDetailsServices;
 	 roles=roleService.getGrantedAuthority(principal.getName());
 	 roles.forEach((Role role)->{
 		 RoleDTO roledto=new RoleDTO();
-		 roledto.setAuthorityName(role.getAuthority());
+		 roledto.setAuthority(role.getAuthority());
 		 roledto.setParentRole(role.getParentRole());
-		 roledto.setRoleDesc(role.getRoleDes());
+		 roledto.setRoleDes(role.getRoleDes());
 		 roledto.setRoleName(role.getRoleName());
 		 roledtos.add(roledto);
 	 });
@@ -84,7 +93,7 @@ private UserDetailsServices userDetailsServices;
 	public List<String> getHierarchyByUserName(Principal principal) {
 		List<String> hirarchyList=null;
 		try {
-		String userName=	principal.getName();
+		String userName=principal.getName();
 		hirarchyList=userDetailsServices.getAllListOfChildRoles(userName);
 		return hirarchyList;
 		}catch(Exception ex) {
@@ -93,15 +102,113 @@ private UserDetailsServices userDetailsServices;
 		return hirarchyList;
 	}
 	@PostMapping("roleCreation")
-	public void roleCreation(Role role) {
+	public ResponseEntity<Map<String, String>>  roleCreation(@RequestBody RoleDTO role) {
+		RoleDTO roles=null;
 		try {
+			 roles=roleService.createUserRole(role);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message","ROle "+roles.getAuthority()+" Created Successfully"));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","ROle "+roles.getAuthority()+" Can not be created successfully"));
+
+		}
+		
+	}
+	@GetMapping("hierarchyList")
+	public List<String>  getHierarchyList() {
+		List<String> hierarchyList=null;
+		try {
+			hierarchyList=roleService.getHierarchyDetails();
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return hierarchyList;
+	}
+	@GetMapping("getallparentrole")
+	public Set<String> getAllParentRole(Principal principal) {
+		Set<String> parentRole=new HashSet<>();
+		Set<Role> roles=null;
+
+		try {
+		roles=roleService.getGrantedAuthority(principal.getName());
+		 roles.forEach((Role role)->{
+			 parentRole.add(role.getAuthority()); 
+		 });
+		 
+		}catch(Exception ex) {
+			ex.printStackTrace();
 			
+		}
+		return parentRole;
+		
+	}
+	
+	
+	@GetMapping("roleModuleSubmoduleActiondetails/{autherityName}")
+	public RoleDTO getRoleDetails(@PathVariable("autherityName")String autherityName,Principal principal) {
+		Role role=null;
+		RoleDTO roleDTO=null;
+		try {
+			//Parent ModuleSabmoduleActionDTO
+			List<ModuleSabmoduleActionDTO>	parentModuleSubmodule=roleService.getModuleSubmodule(principal.getName());
+			//Child ModuleSabmoduleActionDTO
+			List<ModuleSabmoduleActionDTO> childModuleSubmodule= roleService.getModulActionByAutherity(autherityName);
+			Role roleDetails=roleService.getRoleDetailsModuleSubmodule(autherityName);
+			roleDTO=new RoleDTO();
+			roleDTO.setAuthority(roleDetails.getAuthority());
+			roleDTO.setParentRole(roleDetails.getParentRole());
+			roleDTO.setRoleDes(roleDetails.getRoleDes());
+			roleDTO.setRoleName(roleDetails.getRoleName());
+			//List of ModuleSabmoduleActionDTOFinal
+			List<ModuleSabmoduleActionDTO> moduleActionListFinal=new ArrayList<>();
+			moduleActionListFinal.addAll(childModuleSubmodule);
+			List<String> removableSubmodule=new ArrayList<>();
+			moduleActionListFinal.forEach((ModuleSabmoduleActionDTO moduleSabmoduleActionDTO)->{
+				removableSubmodule.add(moduleSabmoduleActionDTO.getSabmoduleName());
+			});
+			
+			parentModuleSubmodule.forEach((ModuleSabmoduleActionDTO ModuleSabmoduleActionDTO)->{
+				if(!removableSubmodule.contains(ModuleSabmoduleActionDTO.getSabmoduleName())) {
+					ModuleSabmoduleActionDTO moduleSabmoduleActionDTO=new ModuleSabmoduleActionDTO();
+					moduleSabmoduleActionDTO.setModuleName(ModuleSabmoduleActionDTO.getModuleName());
+					moduleSabmoduleActionDTO.setSabmoduleName(ModuleSabmoduleActionDTO.getSabmoduleName());
+					moduleSabmoduleActionDTO.setSabModuleAction(new SabModuleAction("0","0","0","0"));
+					moduleActionListFinal.add(ModuleSabmoduleActionDTO);
+				}
+			});
+			
+			
+			roleDTO.setModuleSabmoduleActionDTO(moduleActionListFinal);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
+			
+		return roleDTO;
 	}
+	@PutMapping("updateUserRole")
+	public ResponseEntity<Map<String, String>>  updareRole(@RequestBody RoleDTO roleDTO) {
+		Role role=null;
+		try {
+			role=roleService.updateRoleSubmoduleAction(roleDTO);
+            return ResponseEntity.status(HttpStatus.OK).body(Map.of("message","ROle "+role.getAuthority()+" Updated Successfully"));
+		}catch(Exception ex) {
+			ex.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message","ROle "+role.getAuthority()+" Can not be update"));
+
+		}
+	}
+	@DeleteMapping("roleDelete/{autherityName}")
+	public void deleteRole(@PathVariable("autherityName")String autherityName) {
+		try {
+			roleService.deleteRoleSubmoduleAction(autherityName);
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
 	
 	
 }

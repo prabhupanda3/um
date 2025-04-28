@@ -4,28 +4,33 @@ package com.fmt.Umd.model;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.GeneratorType;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity 
 public class Role implements GrantedAuthority {
     @Id
     @Column(name="role_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer roleId;
     @Column
     private String roleName;
-    @Column
+    @Column(unique = true)
     private String authority;
     @Column
     private String roleDes;
-    @ManyToMany(fetch=FetchType.EAGER)
+    @ManyToMany(fetch=FetchType.EAGER,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REMOVE})
     @JoinTable(joinColumns = {@JoinColumn(name="role_id")},
     inverseJoinColumns = {@JoinColumn(name="action_id")}
     )  
@@ -33,7 +38,7 @@ public class Role implements GrantedAuthority {
     private List<SabModuleAction> sabmoduleAction;
     @Column
     private String parentRole;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.DETACH})
     @JoinTable(joinColumns = {@JoinColumn(name="role_id")},
     inverseJoinColumns = {@JoinColumn(name="module_id")}
     )

@@ -37,10 +37,6 @@ public class Hierarchy {
 	@Column(name="total_level")
 	private String totalLevel;
 	
-	
-	
-	
-	
 	public Hierarchy() {
 		super();
 	}

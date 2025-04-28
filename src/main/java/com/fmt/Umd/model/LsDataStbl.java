@@ -3,6 +3,7 @@ package com.fmt.Umd.model;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class LsDataStbl {
 	@Column(name="time_delay")
 	private int time_delay;
 	@Column(name = "D4_TIME_STAMP",columnDefinition = "TIMESTAMP(6)")
-    private Timestamp D4_TIME_STAMP;
+    private LocalDateTime D4_TIME_STAMP;
 	@Column(name="vr") 
 	private double vr;         
 	@Column(name="vy")
@@ -86,10 +87,15 @@ public class LsDataStbl {
 	public void setTime_delay(int time_delay) {
 		this.time_delay = time_delay;
 	}
-	public Timestamp getD4_TIME_STAMP() {
+	
+	
+	
+	
+	
+	public LocalDateTime getD4_TIME_STAMP() {
 		return D4_TIME_STAMP;
 	}
-	public void setD4_TIME_STAMP(Timestamp d4_TIME_STAMP) {
+	public void setD4_TIME_STAMP(LocalDateTime d4_TIME_STAMP) {
 		D4_TIME_STAMP = d4_TIME_STAMP;
 	}
 	public double getVr() {
