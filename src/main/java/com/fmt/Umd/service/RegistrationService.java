@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
-import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.User;
+import com.fmt.Umd.user.model.Role;
+import com.fmt.Umd.user.model.User;
 
 @Service
 public class RegistrationService {

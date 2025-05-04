@@ -1,4 +1,4 @@
-package com.fmt.Umd.model;
+package com.fmt.Umd.DeviceManagement.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +11,7 @@ public class Hierarchy {
 	@Id
     @Column(name="h_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	private Integer id;
 	@Column(name="hierarchy_id")
 	private int hierarchyId;
 	@Column(name="hierarchy_name")
@@ -25,11 +25,11 @@ public class Hierarchy {
 	@Column(name="code")
 	private String code;
 	@Column(name="capacity")
-	private double capacity;
+	private Double capacity;
 	@Column(name="min_level")
-	private double minLevel;
+	private Double minLevel;
 	@Column(name="max_level")
-	private double maxLevel;
+	private Double maxLevel;
 	@Column(name="active_flag")
 	private int activeFlag;
 	@Column(name="hierarchy_desc")
@@ -42,7 +42,7 @@ public class Hierarchy {
 	}
 	
 	
-	public Hierarchy(Long id, int hierarchyId, String hierarchyName, int hierarchyPid, int clientId,
+	public Hierarchy(Integer id, int hierarchyId, String hierarchyName, int hierarchyPid, int clientId,
 			int hierarchyTypeId, String code, double capacity, double minLevel, double maxLevel, int activeFlag,
 			String hierarchyDesc, String totalLevel) {
 		super();
@@ -62,12 +62,17 @@ public class Hierarchy {
 	}
 
 
-	public Long getId() {
+
+
+
+
+
+	public Integer getId() {
 		return id;
 	}
 
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

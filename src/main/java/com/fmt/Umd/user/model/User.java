@@ -1,4 +1,4 @@
-package com.fmt.Umd.model;
+package com.fmt.Umd.user.model;
 
 import java.util.Collection;
 import java.util.Set;
@@ -52,7 +52,8 @@ public class User implements UserDetails{
 	private String verify;
 	@Column
 	private String Image;
-	
+	@Column
+	private String parentUser;
 	public User() {
 		super();
 	}
@@ -152,6 +153,16 @@ public class User implements UserDetails{
 
 	public void setImage(String image) {
 		Image = image;
+	}
+	
+	
+
+	public String getParentUser() {
+		return parentUser;
+	}
+
+	public void setParentUser(String parentUser) {
+		this.parentUser = parentUser;
 	}
 
 	@Override

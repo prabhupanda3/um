@@ -9,9 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fmt.Umd.Dto.ModuleSabModuleActionDTO;
+import com.fmt.Umd.DeviceManagement.Repository.HierarchyMasterRepository;
 import com.fmt.Umd.Dto.RoleDTO;
-import com.fmt.Umd.Repository.HierarchyMasterRepository;
 import com.fmt.Umd.Repository.ModuleRepository;
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.SabModuleActionRepository;
@@ -19,9 +18,9 @@ import com.fmt.Umd.Repository.SabModuleRepository;
 import com.fmt.Umd.Repository.UserRepository;
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
 import com.fmt.Umd.model.Module;
-import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
 import com.fmt.Umd.model.SubModule;
+import com.fmt.Umd.user.model.Role;
 @Service
 public class RoleService {
 	
@@ -50,13 +49,13 @@ public class RoleService {
 		}
 		return role;
 	}
-	public Set<Module> getRolesByUserName(String username) {
+	public Set<com.fmt.Umd.model.Module> getRolesByUserName(String username) {
 		
-		Set<Module> moduleSet=new HashSet<Module>();
+		Set<com.fmt.Umd.model.Module> moduleSet=new HashSet<com.fmt.Umd.model.Module>();
 		try {
 	Role	roles=userRepository.getUSerRoleByUseName(username);
 	//roles.stream().forEach(role->endpoints.add(role.getEndPoint()));
-	 moduleSet= roles.getModule();
+	moduleSet= roles.getModule();
 	return moduleSet;
 	}
 	catch(Exception ex) {

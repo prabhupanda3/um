@@ -9,17 +9,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fmt.Umd.Repository.HierarchyRepository;
+import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
+import com.fmt.Umd.DeviceManagement.Repository.HyrarchyRepository;
 import com.fmt.Umd.Repository.TotalMasterDataRepository;
 import com.fmt.Umd.Repository.UserRepository;
-import com.fmt.Umd.model.Hierarchy;
 import com.fmt.Umd.model.TotalMasterData;
-import com.fmt.Umd.model.User;
+import com.fmt.Umd.user.model.User;
 
 @Service
 public class DeviceSummaryService {
  @Autowired
- private HierarchyRepository hierarchyRepository;
+ private HyrarchyRepository hierarchyRepository;
  @Autowired
  private UserRepository userRepository;
  @Autowired
@@ -30,18 +30,18 @@ public class DeviceSummaryService {
 			
        Optional<User>	user=userRepository.findByUsername(username);
 		if(user.isPresent()) {
-		User	users=user.get();
-	String	hirarchy=users.getHierarchy();
-	System.out.println("hirarchy :"+hirarchy);
-   String[]	hSet=hirarchy.split(",");
-   List<Integer> hlist=new ArrayList<>();
+		     User	users=user.get();
+	         String	hirarchy=users.getHierarchy();
+	         System.out.println("hirarchy :"+hirarchy);
+             String[]	hSet=hirarchy.split(",");
+             List<Integer> hlist=new ArrayList<>();
    
-   for(String s:hSet) {
-	   hlist.add( Integer.parseInt(s));
-   }
-   System.out.println("Hlist  :"+hlist);
-   List<Hierarchy>  hierarchyDeails=hierarchyRepository.findByHierarchyIdIn(hlist);
-        if(!hierarchyDeails.isEmpty()) {
+             for(String s:hSet) {
+	            hlist.add( Integer.parseInt(s));
+             }
+            System.out.println("Hlist  :"+hlist);
+            List<Hierarchy>  hierarchyDeails=hierarchyRepository.findAllByHierarchyIdIn(hlist);
+            if(!hierarchyDeails.isEmpty()) {
         	for(Hierarchy hierarchy:hierarchyDeails) {
         		System.out.println("HID   :"+hierarchy.getHierarchyId()+"   HNAME :"+hierarchy.getHierarchyName());
         		map.put(hierarchy.getHierarchyId(),hierarchy.getHierarchyName());

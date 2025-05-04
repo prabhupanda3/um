@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fmt.Umd.Exception.UserRegistrationException;
 import com.fmt.Umd.UserDto.UserDTO;
-import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.User;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.UserDetailsServices;
+import com.fmt.Umd.user.model.Role;
+import com.fmt.Umd.user.model.User;
 @CrossOrigin(value="http://localhost:4200")
 @RestController
 @RequestMapping("/usermanagement")
@@ -33,7 +33,7 @@ public class UserRegistrationController {
 	@Autowired
 	private UserDetailsServices userDetailsServices;
 	@PostMapping("/createNewUser")
-	public void userRegistration(@RequestBody UserDTO userdto) {
+	public void userRegistration(@RequestBody UserDTO userdto,Principal principal) {
 		try {
 			System.out.println("Password :"+userdto.getPassword());
 			if(userdto.getPassword().equals(userdto.getConfirmPassword())) {
@@ -45,6 +45,7 @@ public class UserRegistrationController {
 					user.setEmail(userdto.getEmail());
 					user.setMobileNumber(userdto.getMobileNumber());
 					user.setPassword(passwordEncoder.encode(userdto.getPassword()));
+					user.setParentUser(principal.getName());
 					Set<Role> roles=new HashSet<>();
 				    Role role=roleService.getRoleDetailsModuleSubmodule(userdto.getAutherity());
 					roles.add(role);
@@ -74,5 +75,16 @@ public class UserRegistrationController {
 		}
 		return autherity;
 	}
+	@GetMapping("/getAllChildUser")
+	public List<UserDTO> getAllChildUser(Principal principal){
+		List<UserDTO> userDTO=null;
+		try {
+			userDTO=userDetailsServices.getAllChildUser(principal.getName());
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return userDTO;
+	}
+	
 	
 }
