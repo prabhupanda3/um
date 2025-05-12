@@ -9,10 +9,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fmt.Umd.Dashboard.Repository.DaySummaryRepository;
 import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
 import com.fmt.Umd.DeviceManagement.Repository.HyrarchyRepository;
+import com.fmt.Umd.Repository.LiveCommunicationRepository;
 import com.fmt.Umd.Repository.TotalMasterDataRepository;
 import com.fmt.Umd.Repository.UserRepository;
+import com.fmt.Umd.model.LiveCommunication;
 import com.fmt.Umd.model.TotalMasterData;
 import com.fmt.Umd.user.model.User;
 
@@ -24,6 +27,10 @@ public class DeviceSummaryService {
  private UserRepository userRepository;
  @Autowired
  private TotalMasterDataRepository totalMasterDataRepository;
+ @Autowired
+private LiveCommunicationRepository liveCommunicationRepository;
+ @Autowired
+ private DaySummaryRepository daySummaryRepository;
 	public Map<Integer, String> getUserHirarchy(String username) {
 		Map<Integer, String> map=new HashMap<>();
 		try {
@@ -107,6 +114,41 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchy
 	}
 }
 	
-	
+	public  List<LiveCommunication> getLiveStatus(String currentDate) {
+		 List<LiveCommunication> liveCommunication=null;
+		try {
+			String logTimestamp="%"+currentDate+"%";
+	       liveCommunication=liveCommunicationRepository.findByLogtimestampLike(logTimestamp);
+           return liveCommunication;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return liveCommunication;
+	}
+	//Last seven days communication graph
+	public void getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+		try {
+              String hirarchyLevel=level;
+              switch (hirarchyLevel) {
+			case "1":
+				daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
+				break;
+			case "2":
+				daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
+				break;
+			case "3":
+				daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
+				break;
+			case "4":
+				daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
+				break;
+			default:
+				break;
+			}
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 }

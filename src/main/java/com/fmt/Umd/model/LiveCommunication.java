@@ -18,7 +18,7 @@ public  class LiveCommunication {
 	@Column(name="meter_no")
 	private String meterSerialNo;
 	@Column(name="meter_data_status_code")
-	private int meterDataStatusCode;
+	private Integer meterDataStatusCode;
 	@Column(name="d2_timestamp")
 	private String d2TimeStamp;
 	@Column(name="d3_timestamp")
@@ -32,13 +32,37 @@ public  class LiveCommunication {
 	@Column(name="meter_data_type")
 	private String meterDataType;
 	@Column(name="meter_rtc_drift")
-	private int mrd;
+	private Integer mrd;
 	@Column(name="power_fail_status_code")
-	private int mfsc;
+	private Integer mfsc;
 	@Column(name="RAPDRPID")
 	private String rapdrpid;
 	@Column(name="datasource")
 	private String datasource;
+	
+	
+	
+	public LiveCommunication() {
+		super();
+	}
+	public LiveCommunication(Integer slno, String meterSerialNo, Integer meterDataStatusCode, String d2TimeStamp,
+			String d3TimeStamp, String logtimestamp, String mct, String meterType, String meterDataType, Integer mrd,
+			Integer mfsc, String rapdrpid, String datasource) {
+		super();
+		this.slno = slno;
+		this.meterSerialNo = meterSerialNo;
+		this.meterDataStatusCode = meterDataStatusCode;
+		this.d2TimeStamp = d2TimeStamp;
+		this.d3TimeStamp = d3TimeStamp;
+		this.logtimestamp = logtimestamp;
+		this.mct = mct;
+		this.meterType = meterType;
+		this.meterDataType = meterDataType;
+		this.mrd = mrd;
+		this.mfsc = mfsc;
+		this.rapdrpid = rapdrpid;
+		this.datasource = datasource;
+	}
 	public Integer getSlno() {
 		return slno;
 	}
@@ -51,10 +75,10 @@ public  class LiveCommunication {
 	public void setMeterSerialNo(String meterSerialNo) {
 		this.meterSerialNo = meterSerialNo;
 	}
-	public int getMeterDataStatusCode() {
+	public Integer getMeterDataStatusCode() {
 		return meterDataStatusCode;
 	}
-	public void setMeterDataStatusCode(int meterDataStatusCode) {
+	public void setMeterDataStatusCode(Integer meterDataStatusCode) {
 		this.meterDataStatusCode = meterDataStatusCode;
 	}
 	public String getD2TimeStamp() {
@@ -93,16 +117,16 @@ public  class LiveCommunication {
 	public void setMeterDataType(String meterDataType) {
 		this.meterDataType = meterDataType;
 	}
-	public int getMrd() {
+	public Integer getMrd() {
 		return mrd;
 	}
-	public void setMrd(int mrd) {
+	public void setMrd(Integer mrd) {
 		this.mrd = mrd;
 	}
-	public int getMfsc() {
+	public Integer getMfsc() {
 		return mfsc;
 	}
-	public void setMfsc(int mfsc) {
+	public void setMfsc(Integer mfsc) {
 		this.mfsc = mfsc;
 	}
 	public String getRapdrpid() {

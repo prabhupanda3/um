@@ -10,6 +10,6 @@ import com.fmt.Umd.model.LiveCommunication;
 @Repository
 public interface LiveCommunicationRepository extends JpaRepository<LiveCommunication, Integer>{
 
-	public List<LiveCommunication> findAllByLogtimestampLike(String logTimeStamp);
+	public List<LiveCommunication> findByLogtimestampLike(String logTimeStamp);
 	
 }

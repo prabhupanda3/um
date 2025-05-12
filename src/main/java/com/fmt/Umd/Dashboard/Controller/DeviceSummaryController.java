@@ -2,6 +2,7 @@ package com.fmt.Umd.Dashboard.Controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fmt.Umd.Dto.HierarchyDto;
-import com.fmt.Umd.Repository.LiveCommunicationRepository;
 import com.fmt.Umd.model.LiveCommunication;
 import com.fmt.Umd.model.TotalMasterData;
 import com.fmt.Umd.service.DeviceSummaryService;
@@ -31,8 +31,7 @@ public class DeviceSummaryController {
 	
 	@Autowired
 	private DeviceSummaryService deviceSummaryService;
-	@Autowired
-	private LiveCommunicationRepository liveCommunicationRepository;
+	
 	@PostMapping("/userhirarchy")
 	public Map<String,Map<Integer, String>> getHirarchyDetails(@RequestBody HierarchyDto hierarchyDto,Principal principal) {
 		
@@ -73,12 +72,11 @@ public class DeviceSummaryController {
 	public ResponseEntity<Map> getDayCommunication(@RequestBody HierarchyDto hierarchyDto) {
 		Map<String,Integer> map=new LinkedHashMap<String, Integer>();
 		try {
-			System.out.println("=========Day Communication============="+hierarchyDto.getHirarchyLevel()+""+hierarchyDto.getHierarchyId());
+			
 			List<TotalMasterData>	mastersize=null;
-			
-				mastersize=deviceSummaryService.getMasterSizeFilter(hierarchyDto.getHirarchyLevel(), String.valueOf(hierarchyDto.getHierarchyId()));
-            System.out.println("Master size :"+mastersize.toString());
-			
+		    mastersize=deviceSummaryService.getMasterSizeFilter(hierarchyDto.getHirarchyLevel(), String.valueOf(hierarchyDto.getHierarchyId()));
+			System.out.println("Hirarchy level :"+hierarchyDto.getHirarchyLevel());
+
 			Set<String> agMeterSet=new HashSet<>();
             Set<String> nonagMeterSet=new HashSet<>();
             Set<String> kv33set=new HashSet<>();
@@ -96,30 +94,40 @@ public class DeviceSummaryController {
 			
 		});
 			LocalDate currentDate = LocalDate.now();
-	        System.out.println("Local date time=====>"+currentDate);
+	        System.out.println("Local date time=====>"+currentDate.toString());
 	        int agCommCount=0;
-       	 int nonAgCount=0;
-       	 int kv33Count=0;  
-	        List<LiveCommunication> liveCommunication=liveCommunicationRepository.findAllByLogtimestampLike(currentDate.toString());
+       	    int nonAgCount=0;
+       	    int kv33Count=0; 
+       	    Set<String> agComm=new HashSet<>();
+       	    Set<String> nonagComm=new HashSet<>();
+       	    Set<String> Comm33Kv=new HashSet<>();
+
+       	    List<LiveCommunication> liveCommunication=	 deviceSummaryService.getLiveStatus(currentDate.toString());
+	        System.out.println("Communication :"+liveCommunication.size());
+	        
 	        for(LiveCommunication lc:liveCommunication) {
-	        	if(agMeterSet.contains(lc.getMeterSerialNo())) {
-	        		agCommCount++;
+	        	if(agMeterSet.contains(lc.getMeterSerialNo().trim())) {
+	        		agComm.add(lc.getMeterSerialNo());
 	        	}
-	        	else if(nonagMeterSet.contains(lc.getMeterSerialNo())) {
-	        		nonAgCount++;
+	        	else if(nonagMeterSet.contains(lc.getMeterSerialNo().trim())) {
+	        		nonagComm.add(lc.getMeterSerialNo());
+	        		
+	        	}
+	        	else if(kv33set.contains(lc.getMeterSerialNo())){
+	        		Comm33Kv.add(lc.getMeterSerialNo());
 	        	}
 	        	else {
-	        		kv33Count++;
+	        		continue;
 	        	}
 	        }
 	   
-	        map.put("AgCommunicating",agCommCount);
+	        map.put("AgCommunicating",agComm.size());
 	        map.put("AgTotal", agMeterSet.size());
-	        map.put("NonAgCommunicating",nonAgCount);
+	        map.put("NonAgCommunicating",nonagComm.size());
 	        map.put("NonAgTotal", nonagMeterSet.size());
-			map.put("kvComm33", kv33Count);
+			map.put("kvComm33", Comm33Kv.size());
 			map.put("kvtotal33", kv33set.size());
-			map.put("GrandToalCommunicating", agCommCount+nonAgCount+nonAgCount);
+			map.put("GrandToalCommunicating", agComm.size()+nonagComm.size()+Comm33Kv.size());
 			map.put("GrandTotal", mastersize.size());
 			System.out.println(map.toString());
 			return ResponseEntity
@@ -133,6 +141,23 @@ public class DeviceSummaryController {
 		}
 	}
 
-	
+	//Sevendays communication status
+	@PostMapping("/lastSevenDaysComm")
+	public void sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto) {
+		try {
+			String hierarchyLevel=hierarchyDto.getHirarchyLevel();
+			System.out.println("Hierarchy Level  :"+hierarchyLevel);
+			LocalDate currentDate = LocalDate.now();
+            List<String> lastSevenDays=new ArrayList<>();
+			for(int i=1;i<=7;i++) {
+				lastSevenDays.add(LocalDate.now().minusDays(i).toString());
+			}
+			
+			deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		
+	}
 
 }
