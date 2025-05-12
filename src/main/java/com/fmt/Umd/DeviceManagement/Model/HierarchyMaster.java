@@ -1,4 +1,4 @@
-package com.fmt.Umd.model;
+package com.fmt.Umd.DeviceManagement.Model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

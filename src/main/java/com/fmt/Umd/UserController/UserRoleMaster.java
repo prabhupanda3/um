@@ -23,10 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fmt.Umd.Dto.RoleDTO;
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
-import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SabModuleAction;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.UserDetailsServices;
+import com.fmt.Umd.user.model.Role;
 
 @RestController
 @CrossOrigin(value = "http://localhost:4200")

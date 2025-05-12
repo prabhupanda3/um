@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fmt.Umd.Dto.LoginresponseDTO;
 import com.fmt.Umd.Dto.RegistrationDto;
 import com.fmt.Umd.model.Module;
-import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.User;
 import com.fmt.Umd.service.AuthenticationService;
 import com.fmt.Umd.service.MailService;
 import com.fmt.Umd.service.ModuleService;
@@ -28,6 +26,8 @@ import com.fmt.Umd.service.RegistrationService;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.TokenService;
 import com.fmt.Umd.service.UserDetailsServices;
+import com.fmt.Umd.user.model.Role;
+import com.fmt.Umd.user.model.User;
 @CrossOrigin(value = "http://localhost:4200")
 @RestController
 @RequestMapping("/auth/")

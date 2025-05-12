@@ -1,4 +1,4 @@
-package com.fmt.Umd.model;
+package com.fmt.Umd.user.model;
 
 
 import java.util.List;
@@ -14,8 +14,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import com.fmt.Umd.model.*;
+import com.fmt.Umd.model.Module;
 
-import org.hibernate.annotations.GeneratorType;
 import org.springframework.security.core.GrantedAuthority;
 
 @Entity 

@@ -9,39 +9,46 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fmt.Umd.Repository.HierarchyRepository;
+import com.fmt.Umd.Dashboard.Repository.DaySummaryRepository;
+import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
+import com.fmt.Umd.DeviceManagement.Repository.HyrarchyRepository;
+import com.fmt.Umd.Repository.LiveCommunicationRepository;
 import com.fmt.Umd.Repository.TotalMasterDataRepository;
 import com.fmt.Umd.Repository.UserRepository;
-import com.fmt.Umd.model.Hierarchy;
+import com.fmt.Umd.model.LiveCommunication;
 import com.fmt.Umd.model.TotalMasterData;
-import com.fmt.Umd.model.User;
+import com.fmt.Umd.user.model.User;
 
 @Service
 public class DeviceSummaryService {
  @Autowired
- private HierarchyRepository hierarchyRepository;
+ private HyrarchyRepository hierarchyRepository;
  @Autowired
  private UserRepository userRepository;
  @Autowired
  private TotalMasterDataRepository totalMasterDataRepository;
+ @Autowired
+private LiveCommunicationRepository liveCommunicationRepository;
+ @Autowired
+ private DaySummaryRepository daySummaryRepository;
 	public Map<Integer, String> getUserHirarchy(String username) {
 		Map<Integer, String> map=new HashMap<>();
 		try {
 			
        Optional<User>	user=userRepository.findByUsername(username);
 		if(user.isPresent()) {
-		User	users=user.get();
-	String	hirarchy=users.getHierarchy();
-	System.out.println("hirarchy :"+hirarchy);
-   String[]	hSet=hirarchy.split(",");
-   List<Integer> hlist=new ArrayList<>();
+		     User	users=user.get();
+	         String	hirarchy=users.getHierarchy();
+	         System.out.println("hirarchy :"+hirarchy);
+             String[]	hSet=hirarchy.split(",");
+             List<Integer> hlist=new ArrayList<>();
    
-   for(String s:hSet) {
-	   hlist.add( Integer.parseInt(s));
-   }
-   System.out.println("Hlist  :"+hlist);
-   List<Hierarchy>  hierarchyDeails=hierarchyRepository.findByHierarchyIdIn(hlist);
-        if(!hierarchyDeails.isEmpty()) {
+             for(String s:hSet) {
+	            hlist.add( Integer.parseInt(s));
+             }
+            System.out.println("Hlist  :"+hlist);
+            List<Hierarchy>  hierarchyDeails=hierarchyRepository.findAllByHierarchyIdIn(hlist);
+            if(!hierarchyDeails.isEmpty()) {
         	for(Hierarchy hierarchy:hierarchyDeails) {
         		System.out.println("HID   :"+hierarchy.getHierarchyId()+"   HNAME :"+hierarchy.getHierarchyName());
         		map.put(hierarchy.getHierarchyId(),hierarchy.getHierarchyName());
@@ -107,6 +114,41 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchy
 	}
 }
 	
-	
+	public  List<LiveCommunication> getLiveStatus(String currentDate) {
+		 List<LiveCommunication> liveCommunication=null;
+		try {
+			String logTimestamp="%"+currentDate+"%";
+	       liveCommunication=liveCommunicationRepository.findByLogtimestampLike(logTimestamp);
+           return liveCommunication;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return liveCommunication;
+	}
+	//Last seven days communication graph
+	public void getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+		try {
+              String hirarchyLevel=level;
+              switch (hirarchyLevel) {
+			case "1":
+				daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
+				break;
+			case "2":
+				daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
+				break;
+			case "3":
+				daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
+				break;
+			case "4":
+				daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
+				break;
+			default:
+				break;
+			}
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
 	
 }

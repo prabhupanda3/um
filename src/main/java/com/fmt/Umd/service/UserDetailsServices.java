@@ -1,5 +1,6 @@
 package com.fmt.Umd.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -11,8 +12,9 @@ import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Repository.RoleRepository;
 import com.fmt.Umd.Repository.UserRepository;
-import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.User;
+import com.fmt.Umd.UserDto.UserDTO;
+import com.fmt.Umd.user.model.Role;
+import com.fmt.Umd.user.model.User;
 
 @Service
 
@@ -71,6 +73,27 @@ private RoleRepository roleRepository;
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+	public List<UserDTO> getAllChildUser(String name) {
+		// TODO Auto-generated method stub
+		List<UserDTO> list=new ArrayList<>();
+		try {
+		List<User>	user=userRepository.findAllByParentUser(name);
+		for(User u:user) {
+			UserDTO userDTO=new UserDTO();
+			userDTO.setUsername(u.getUsername());
+			userDTO.setUserIdName(u.getUserIdName());
+		Set<Role>	roleSet=u.getRole();
+		roleSet.forEach((Role r)->userDTO.setAutherity(r.getAuthority()));
+		userDTO.setAddress(u.getAddress());
+		userDTO.setEmail(u.getEmail());
+		userDTO.setMobileNumber(u.getMobileNumber());
+		list.add(userDTO);
+		}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			}
+		return list;
 	}
 	
 	

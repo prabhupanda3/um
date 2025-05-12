@@ -3,8 +3,8 @@ package com.fmt.Umd.Dto;
 import java.util.Set;
 
 import com.fmt.Umd.model.Module;
-import com.fmt.Umd.model.Role;
-import com.fmt.Umd.model.User;
+import com.fmt.Umd.user.model.Role;
+import com.fmt.Umd.user.model.User;
 
 public class LoginresponseDTO {
 

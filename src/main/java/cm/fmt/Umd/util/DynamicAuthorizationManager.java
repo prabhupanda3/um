@@ -12,9 +12,9 @@ import org.springframework.security.web.access.intercept.RequestAuthorizationCon
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
-import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SubModule;
 import com.fmt.Umd.service.RoleService;
+import com.fmt.Umd.user.model.Role;
 @Component
 public class DynamicAuthorizationManager implements AuthorizationManager<RequestAuthorizationContext>{
 	@Autowired

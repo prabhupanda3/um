@@ -27,10 +27,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.security.web.SecurityFilterChain;
 
 import com.fmt.Umd.model.Module;
-import com.fmt.Umd.model.Role;
 import com.fmt.Umd.model.SubModule;
 import com.fmt.Umd.service.RoleService;
 import com.fmt.Umd.service.UserDetailsServices;
+import com.fmt.Umd.user.model.Role;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
