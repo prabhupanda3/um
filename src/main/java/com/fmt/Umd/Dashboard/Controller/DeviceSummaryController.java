@@ -3,12 +3,14 @@ package com.fmt.Umd.Dashboard.Controller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -143,7 +145,8 @@ public class DeviceSummaryController {
 
 	//Sevendays communication status
 	@PostMapping("/lastSevenDaysComm")
-	public void sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto) {
+	public void sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto,Principal principal) {
+		Map<Date,Double> communicationInPercentage=new TreeMap<>();
 		try {
 			String hierarchyLevel=hierarchyDto.getHirarchyLevel();
 			System.out.println("Hierarchy Level  :"+hierarchyLevel);
@@ -153,7 +156,11 @@ public class DeviceSummaryController {
 				lastSevenDays.add(LocalDate.now().minusDays(i).toString());
 			}
 			
-			deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
+			List<Object[]> communicationCountPerDay=deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
+		for(Object obj:communicationCountPerDay) {
+			
+			
+		}
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Entity
 public class HierarchyMaster {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@Column(name="hierarchy_type_id")
 	private int HierarchyTypeId;
@@ -28,9 +28,9 @@ public class HierarchyMaster {
 	
 	
 	
-	
-	
-	
+	public HierarchyMaster() {
+		super();
+	}
 	public HierarchyMaster(int id, int hierarchyTypeId, String hierarchyTitle, int clientId, String titleString,
 			int parentTitleId, int activeFlag, String deviceLocation) {
 		super();

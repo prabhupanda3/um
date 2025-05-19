@@ -70,8 +70,8 @@ private LiveCommunicationRepository liveCommunicationRepository;
 public Map<Integer, String>	getHierarchyByParentid(int hierarchyPid){
 	Map<Integer, String> hirarchyMap=new HashMap<Integer, String>();
 	try {
-		int activeFlag=1;
-		List<Hierarchy> hierarchylist=hierarchyRepository.findByHierarchyPidAndActiveFlag(hierarchyPid, activeFlag);
+		String activeFlag="1";
+		List<Hierarchy> hierarchylist=hierarchyRepository.findByHierarchyPidAndActiveFlg(hierarchyPid, activeFlag);
 		
 		
 		for(Hierarchy hierarchy:hierarchylist) {
@@ -126,28 +126,32 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchy
 		return liveCommunication;
 	}
 	//Last seven days communication graph
-	public void getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+	public List<Object[]> getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+		List<Object[]> communicationCountPerday=null;
+
 		try {
               String hirarchyLevel=level;
               switch (hirarchyLevel) {
 			case "1":
-				daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
+				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
 				break;
 			case "2":
-				daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
+				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
 				break;
 			case "3":
-				daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
+				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
 				break;
 			case "4":
-				daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
+				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
 				break;
 			default:
 				break;
 			}
+              return communicationCountPerday;
 		
 		}catch(Exception ex) {
 			ex.printStackTrace();
+			return communicationCountPerday;
 		}
 	}
 	

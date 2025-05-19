@@ -16,10 +16,10 @@ public class HierarchyService {
 
      public void getHirarchyList(){
 	try {
-		List<Hierarchy>	hirarchyList=hyrarchyRepository.findByHierarchyPidAndActiveFlag(0, 0);
-		hirarchyList.forEach((Hierarchy hierarchy)->{
+		//List<Hierarchy>	hirarchyList=hyrarchyRepository.findByHierarchyPidAndActiveFlag(0, 0);
+		//hirarchyList.forEach((Hierarchy hierarchy)->{
 			
-		});
+		//});
 		
 	}catch(Exception ex) {
 		ex.printStackTrace();
