@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -70,8 +71,8 @@ private LiveCommunicationRepository liveCommunicationRepository;
 public Map<Integer, String>	getHierarchyByParentid(int hierarchyPid){
 	Map<Integer, String> hirarchyMap=new HashMap<Integer, String>();
 	try {
-		int activeFlag=1;
-		List<Hierarchy> hierarchylist=hierarchyRepository.findByHierarchyPidAndActiveFlag(hierarchyPid, activeFlag);
+		String activeFlag="1";
+		List<Hierarchy> hierarchylist=hierarchyRepository.findByHierarchyPidAndActiveFlg(hierarchyPid, activeFlag);
 		
 		
 		for(Hierarchy hierarchy:hierarchylist) {
@@ -126,29 +127,46 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchy
 		return liveCommunication;
 	}
 	//Last seven days communication graph
-	public void getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+	public Map<String,Double> getLastSevenDaysCommunicationStatus(String level,String hierarchyName,Integer hierarchyId,List<String> commDate) {
+		Map<String,Double> lastSevenDaysCommPercentage=null;
 		try {
+			List<Object[]> dateWiseCommunicationCount=null;
               String hirarchyLevel=level;
               switch (hirarchyLevel) {
 			case "1":
-				daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
+				dateWiseCommunicationCount=daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
 				break;
 			case "2":
-				daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
+				dateWiseCommunicationCount=daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
 				break;
 			case "3":
-				daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
+				dateWiseCommunicationCount=daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
 				break;
 			case "4":
-				daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
+				dateWiseCommunicationCount=daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
 				break;
 			default:
 				break;
+				
 			}
+             Integer lev= Integer.parseInt(level)-1;
+             String hlevel=lev.toString();
+             List<TotalMasterData> listOfTotalMaster=getMasterSizeFilter(hlevel,hierarchyId.toString());
+             System.out.println("Mastersize :"+listOfTotalMaster.size());
+             lastSevenDaysCommPercentage=new TreeMap<>();
+             for(Object[] obj:dateWiseCommunicationCount) {            	 
+            	 Double per=(Double)obj[1];
+            	 Integer percentage=per.intValue();
+            	 Double dayWisePercentage=((double)percentage/listOfTotalMaster.size())*100;
+            	 dayWisePercentage = Math.round(dayWisePercentage * 100.0) / 100.0;
+                 System.out.println("Day percentage :"+(String)obj[0] +"  "+dayWisePercentage);
+            	 lastSevenDaysCommPercentage.put((String)obj[0],dayWisePercentage);
+             }
 		
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		return lastSevenDaysCommPercentage;
 	}
 	
 }

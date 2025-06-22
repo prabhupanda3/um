@@ -2,6 +2,7 @@ package com.fmt.Umd.Dashboard.Controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -143,21 +144,36 @@ public class DeviceSummaryController {
 
 	//Sevendays communication status
 	@PostMapping("/lastSevenDaysComm")
-	public void sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto) {
+	public Map<String,Double>  sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto) {
+		Map<String,Double> lastSevenDaysCommPercentage=null;
+
 		try {
 			String hierarchyLevel=hierarchyDto.getHirarchyLevel();
 			System.out.println("Hierarchy Level  :"+hierarchyLevel);
-			LocalDate currentDate = LocalDate.now();
-            List<String> lastSevenDays=new ArrayList<>();
-			for(int i=1;i<=7;i++) {
-				lastSevenDays.add(LocalDate.now().minusDays(i).toString());
-			}
-			
-			deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
+			//deviceSummaryService.getMasterSizeFilter(hierarchyLevel, String.valueOf(hierarchyDto.getHierarchyId()));
+			// Date parsing
+	        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	        String currentDate = "2022-06-02";
+	        LocalDate parsedDate = LocalDate.parse(currentDate, inputFormatter);
+
+	        System.out.println("Current Date : " + parsedDate.format(inputFormatter));
+
+	        // Prepare output formatter
+	        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	        // Generate and print last 7 days
+	        List<String> lastSevenDays = new ArrayList<>();
+            lastSevenDays.add(parsedDate.format(inputFormatter));
+	        for (int i = 1; i <= 6; i++) {
+	            LocalDate date = parsedDate.minusDays(i);
+	            lastSevenDays.add(date.format(outputFormatter));
+	        }
+
+	         lastSevenDaysCommPercentage=deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName(),hierarchyDto.getHierarchyId() , lastSevenDays);
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
-		
+		return lastSevenDaysCommPercentage;
 	}
 
 }

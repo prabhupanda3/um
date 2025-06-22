@@ -10,6 +10,6 @@ import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
 
 @Repository
 public interface HyrarchyRepository extends JpaRepository<Hierarchy, Integer>{
-	public List<Hierarchy> findByHierarchyPidAndActiveFlag(int hierarchyPid,int activeFlag);
+	public List<Hierarchy> findByHierarchyPidAndActiveFlg(int hierarchyPid,String activeFlag);
     public List<Hierarchy> findAllByHierarchyIdIn(List<Integer> hierarchyIds);
 }

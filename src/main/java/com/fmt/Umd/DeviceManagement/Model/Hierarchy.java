@@ -31,20 +31,24 @@ public class Hierarchy {
 	@Column(name="max_level")
 	private Double maxLevel;
 	@Column(name="active_flag")
-	private int activeFlag;
+	private Integer activeFlag;
 	@Column(name="hierarchy_desc")
 	private String hierarchyDesc;
 	@Column(name="total_level")
 	private String totalLevel;
+	@Column(name="active_flg")
+	private String activeFlg;
 	
+
+
 	public Hierarchy() {
 		super();
 	}
-	
-	
+
+
 	public Hierarchy(Integer id, int hierarchyId, String hierarchyName, int hierarchyPid, int clientId,
-			int hierarchyTypeId, String code, double capacity, double minLevel, double maxLevel, int activeFlag,
-			String hierarchyDesc, String totalLevel) {
+			int hierarchyTypeId, String code, Double capacity, Double minLevel, Double maxLevel, Integer activeFlag,
+			String hierarchyDesc, String totalLevel, String activeFlg) {
 		super();
 		this.id = id;
 		this.hierarchyId = hierarchyId;
@@ -59,12 +63,8 @@ public class Hierarchy {
 		this.activeFlag = activeFlag;
 		this.hierarchyDesc = hierarchyDesc;
 		this.totalLevel = totalLevel;
+		this.activeFlg = activeFlg;
 	}
-
-
-
-
-
 
 
 	public Integer getId() {
@@ -148,6 +148,36 @@ public class Hierarchy {
 	}
 	public void setTotalLevel(String totalLevel) {
 		this.totalLevel = totalLevel;
+	}
+
+
+	public String getActiveFlg() {
+		return activeFlg;
+	}
+
+
+	public void setActiveFlg(String activeFlg) {
+		this.activeFlg = activeFlg;
+	}
+
+
+	public void setCapacity(Double capacity) {
+		this.capacity = capacity;
+	}
+
+
+	public void setMinLevel(Double minLevel) {
+		this.minLevel = minLevel;
+	}
+
+
+	public void setMaxLevel(Double maxLevel) {
+		this.maxLevel = maxLevel;
+	}
+
+
+	public void setActiveFlag(Integer activeFlag) {
+		this.activeFlag = activeFlag;
 	}
 	
 
