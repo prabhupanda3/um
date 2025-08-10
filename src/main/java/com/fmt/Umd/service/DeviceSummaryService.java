@@ -9,9 +9,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fmt.Umd.Dashboard.Projection.CommSummaryProjection;
 import com.fmt.Umd.Dashboard.Repository.DaySummaryRepository;
 import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
 import com.fmt.Umd.DeviceManagement.Repository.HyrarchyRepository;
+import com.fmt.Umd.Exception.HierarchyException;
 import com.fmt.Umd.Repository.LiveCommunicationRepository;
 import com.fmt.Umd.Repository.TotalMasterDataRepository;
 import com.fmt.Umd.Repository.UserRepository;
@@ -63,18 +65,19 @@ private LiveCommunicationRepository liveCommunicationRepository;
 			 map.put(1, str);
 }
 		 return map;
-		
-		
-	
 	}
+	
+	
+	
 public Map<Integer, String>	getHierarchyByParentid(int hierarchyPid){
 	Map<Integer, String> hirarchyMap=new HashMap<Integer, String>();
 	try {
 		String activeFlag="1";
 		List<Hierarchy> hierarchylist=hierarchyRepository.findByHierarchyPidAndActiveFlg(hierarchyPid, activeFlag);
-		
+		System.out.println("Hierarchy List"+hierarchylist.size());
 		
 		for(Hierarchy hierarchy:hierarchylist) {
+			System.out.println(hierarchy.getHierarchyId()+"   :   "+hierarchy.getHierarchyName());
 			hirarchyMap.put(hierarchy.getHierarchyId(),hierarchy.getHierarchyName());			
 		}
 		
@@ -83,42 +86,41 @@ public Map<Integer, String>	getHierarchyByParentid(int hierarchyPid){
 }
 	return hirarchyMap;
 	}
+public List<TotalMasterData> getMasterSizeFilter(String levelId, double hierarchyIds) {
+    try {
+        if (levelId == null) {
+            throw new HierarchyException("Level ID is null");
+        }
 
-public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchyId){
-	try {
-		if(levelId!=null) {
-		if(Integer.parseInt(levelId)==0) {
-			return totalMasterDataRepository.findAllByRegionid(Double.parseDouble(hierarchyId));
-		}
-		else if(Integer.parseInt(levelId)==1) {
-			return	totalMasterDataRepository.findAllByCircleid(Double.parseDouble(hierarchyId));
-		}
-		else if(Integer.parseInt(levelId)==2) {
-			return	totalMasterDataRepository.findAllByDivisionid(Double.parseDouble(hierarchyId));
-		}
-		else if(Integer.parseInt(levelId)==3) {
-			return	totalMasterDataRepository.findAllBySdid(Double.parseDouble(hierarchyId));
-		}
-		else if(Integer.parseInt(levelId)==4) {
-			return	totalMasterDataRepository.findAllBySsid(Double.parseDouble(hierarchyId));
-		}
-		else {
-			return	totalMasterDataRepository.findAllByRegionid(Double.parseDouble(hierarchyId));
-		}
-		}else {
-			return totalMasterDataRepository.findAll();
-		}
-		
-	}catch(Exception ex) {
-		return totalMasterDataRepository.findAllByRegionid(Double.parseDouble(hierarchyId));
-	}
+        int level = Integer.parseInt(levelId);
+
+        switch (level) {
+            case 0:
+                return totalMasterDataRepository.findAllByRegionid(hierarchyIds);
+            case 1:
+                return totalMasterDataRepository.findAllByCircleid(hierarchyIds);
+            case 2:
+                return totalMasterDataRepository.findAllByDivisionid(hierarchyIds);
+            case 3:
+                return totalMasterDataRepository.findAllBySdid(hierarchyIds);
+            case 4:
+                return totalMasterDataRepository.findAllBySsid(hierarchyIds);
+            default:
+                throw new HierarchyException("Hierarchy level mismatched: " + level);
+        }
+
+    } catch (HierarchyException | NumberFormatException e) {
+        // Log the error if logging is used
+        // Fallback to region level
+        return totalMasterDataRepository.findAllByRegionid(hierarchyIds);
+    }
 }
 	
 	public  List<LiveCommunication> getLiveStatus(String currentDate) {
 		 List<LiveCommunication> liveCommunication=null;
 		try {
 			String logTimestamp="%"+currentDate+"%";
-	       liveCommunication=liveCommunicationRepository.findByLogtimestampLike(logTimestamp);
+	       liveCommunication=liveCommunicationRepository.findByD3TimeStampLike(logTimestamp);
            return liveCommunication;
 		}catch(Exception ex) {
 			ex.printStackTrace();
@@ -126,22 +128,22 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId,String hierarchy
 		return liveCommunication;
 	}
 	//Last seven days communication graph
-	public List<Object[]> getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
-		List<Object[]> communicationCountPerday=null;
-
+	public List<CommSummaryProjection> getLastSevenDaysCommunicationStatus(String level,String hierarchyName,List<String> commDate) {
+		List<CommSummaryProjection> communicationCountPerday=null;
+                System.out.println("Hierarchy level :"+level+" HierarchyName : "+hierarchyName+ " Comm data :"+commDate.toString());
 		try {
               String hirarchyLevel=level;
               switch (hirarchyLevel) {
-			case "1":
+			case "0":
 				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationBYDiscom(commDate, hierarchyName);
 				break;
-			case "2":
+			case "1":
 				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationByCircle(commDate, hierarchyName);
 				break;
-			case "3":
+			case "2":
 				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationByDivision(commDate,hierarchyName);
 				break;
-			case "4":
+			case "3":
 				communicationCountPerday=daySummaryRepository.findLastSevenDaysCommunicationBySdo(commDate, hierarchyName);
 				break;
 			default:

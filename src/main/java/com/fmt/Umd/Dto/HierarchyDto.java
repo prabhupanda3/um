@@ -1,5 +1,7 @@
 package com.fmt.Umd.Dto;
 
+import java.util.List;
+
 public class HierarchyDto {
 	private String username;
 	private int hierarchyId;
@@ -27,8 +29,7 @@ public class HierarchyDto {
 	private String totalLevel;
 	private String date;
 	private String hirarchyLevel;
-	
-
+	private List<Double> hirarchyIdList;
 	
 	public HierarchyDto() {
 		super();
@@ -205,6 +206,18 @@ public class HierarchyDto {
 	public void setHirarchyLevel(String hirarchyLevel) {
 		this.hirarchyLevel = hirarchyLevel;
 	}
+
+
+	public List<Double> getHirarchyIdList() {
+		return hirarchyIdList;
+	}
+
+
+	public void setHirarchyIdList(List<Double> hirarchyIdList) {
+		this.hirarchyIdList = hirarchyIdList;
+	}
+
+
 	
 	
 	

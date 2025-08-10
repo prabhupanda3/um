@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fmt.Umd.Dashboard.Projection.CommSummaryProjection;
 import com.fmt.Umd.Dto.HierarchyDto;
 import com.fmt.Umd.model.LiveCommunication;
 import com.fmt.Umd.model.TotalMasterData;
@@ -43,7 +44,7 @@ public class DeviceSummaryController {
 		String realHirarchy=null;
 		if(principal.getName()!=null && hierarchyDto.getHierarchyId()!=0) {
 			String hirarchyLevel=hierarchyDto.getHirarchyLevel();
-			System.out.println("Hirarchy Level :"+hirarchyLevel);
+			System.out.println("Hirarchy Level :"+hirarchyLevel+ "Hierarchy id :"+ hierarchyDto.getHierarchyId());
 			for(String hi:hirarchyLevels ) {
 				if(Integer.parseInt(hirarchyLevel)<4) {
 					realHirarchy=hirarchyLevels[Integer.parseInt(hirarchyLevel)];	
@@ -56,7 +57,7 @@ public class DeviceSummaryController {
 			 hirarchyMap.put(realHirarchy,deviceSummaryService.getHierarchyByParentid(hierarchyDto.getHierarchyId()));
 			 return hirarchyMap;
 		}else {
-			
+			System.out.println("Hierarchy else block");
 			hirarchyMap.put("Region", deviceSummaryService.getUserHirarchy(principal.getName()));
 			 
          return hirarchyMap;
@@ -76,7 +77,7 @@ public class DeviceSummaryController {
 		try {
 			
 			List<TotalMasterData>	mastersize=null;
-		    mastersize=deviceSummaryService.getMasterSizeFilter(hierarchyDto.getHirarchyLevel(), String.valueOf(hierarchyDto.getHierarchyId()));
+		    mastersize=deviceSummaryService.getMasterSizeFilter(hierarchyDto.getHirarchyLevel(),hierarchyDto.getHierarchyId());
 			System.out.println("Hirarchy level :"+hierarchyDto.getHirarchyLevel());
 
 			Set<String> agMeterSet=new HashSet<>();
@@ -95,8 +96,7 @@ public class DeviceSummaryController {
 			}
 			
 		});
-			LocalDate currentDate = LocalDate.now();
-	        System.out.println("Local date time=====>"+currentDate.toString());
+			
 	        int agCommCount=0;
        	    int nonAgCount=0;
        	    int kv33Count=0; 
@@ -104,7 +104,7 @@ public class DeviceSummaryController {
        	    Set<String> nonagComm=new HashSet<>();
        	    Set<String> Comm33Kv=new HashSet<>();
 
-       	    List<LiveCommunication> liveCommunication=	 deviceSummaryService.getLiveStatus(currentDate.toString());
+       	    List<LiveCommunication> liveCommunication=	 deviceSummaryService.getLiveStatus(hierarchyDto.getDate());
 	        System.out.println("Communication :"+liveCommunication.size());
 	        
 	        for(LiveCommunication lc:liveCommunication) {
@@ -145,25 +145,39 @@ public class DeviceSummaryController {
 
 	//Sevendays communication status
 	@PostMapping("/lastSevenDaysComm")
-	public void sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto,Principal principal) {
-		Map<Date,Double> communicationInPercentage=new TreeMap<>();
+	public Map<String,List<String> > sevenDaysStatus(@RequestBody HierarchyDto hierarchyDto,Principal principal) {
+		List<CommSummaryProjection> communicationCountPerDay=null;
+        Map<String,List<String> > map=new HashMap<>();
 		try {
 			String hierarchyLevel=hierarchyDto.getHirarchyLevel();
-			System.out.println("Hierarchy Level  :"+hierarchyLevel);
-			LocalDate currentDate = LocalDate.now();
+			List<TotalMasterData>	mastersize=null;
+		    mastersize=deviceSummaryService.getMasterSizeFilter(hierarchyDto.getHirarchyLevel(),hierarchyDto.getHierarchyId());
+			System.out.println("Hierarchy Level  :"+hierarchyLevel+" Date :"+hierarchyDto.getDate());
+			LocalDate currentDate = LocalDate.parse(hierarchyDto.getDate());
             List<String> lastSevenDays=new ArrayList<>();
-			for(int i=1;i<=7;i++) {
-				lastSevenDays.add(LocalDate.now().minusDays(i).toString());
+            lastSevenDays.add(currentDate.toString());
+			for(int i=1;i<=6;i++) {
+				lastSevenDays.add(currentDate.minusDays(i).toString());
 			}
-			
-			List<Object[]> communicationCountPerDay=deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
-		for(Object obj:communicationCountPerDay) {
-			
-			
+			List<String> date=new ArrayList<>();
+			List<String> communicationCount=new ArrayList<>();
+			List<String> totaoCount=new ArrayList<>();
+
+			 communicationCountPerDay=deviceSummaryService.getLastSevenDaysCommunicationStatus(hierarchyLevel,hierarchyDto.getHierarchyName() , lastSevenDays);
+		for(CommSummaryProjection communication:communicationCountPerDay) {
+			date.add(communication.getCommDate());
+			communicationCount.add(communication.getTotalComm().toString());
 		}
+		totaoCount.add(String.valueOf(mastersize.size()));
+		map.put("Date", date);
+		map.put("communicationCount", communicationCount);
+		map.put("TotalCount", totaoCount);
+
+        return map;
 		}catch(Exception ex) {
 			ex.printStackTrace();
-		}
+			
+			return map;		}
 		
 	}
 
