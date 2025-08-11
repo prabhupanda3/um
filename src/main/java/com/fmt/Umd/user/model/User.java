@@ -1,6 +1,7 @@
 package com.fmt.Umd.user.model;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -15,6 +16,8 @@ import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fmt.Umd.DeviceManagement.Model.HierarchyMaster;
 
 @Entity
 public class User implements UserDetails{
@@ -54,6 +57,12 @@ public class User implements UserDetails{
 	private String Image;
 	@Column
 	private String parentUser;
+	@OneToMany(fetch = FetchType.EAGER)
+	 @JoinTable( name = "uer_hmaster",
+			 joinColumns = {@JoinColumn(name="user_id")},
+		        inverseJoinColumns = {@JoinColumn(name="hm_id")}
+			    )
+	private List<HierarchyMaster> hierarchyMaster;
 	public User() {
 		super();
 	}
@@ -163,6 +172,17 @@ public class User implements UserDetails{
 
 	public void setParentUser(String parentUser) {
 		this.parentUser = parentUser;
+	}
+
+	
+	
+	
+	public List<HierarchyMaster> getHierarchyMaster() {
+		return hierarchyMaster;
+	}
+
+	public void setHierarchyMaster(List<HierarchyMaster> hierarchyMaster) {
+		this.hierarchyMaster = hierarchyMaster;
 	}
 
 	@Override

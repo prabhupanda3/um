@@ -1,5 +1,6 @@
 package com.fmt.Umd.Dto;
 
+import java.util.List;
 import java.util.Set;
 
 import com.fmt.Umd.model.Module;
@@ -16,12 +17,16 @@ public class LoginresponseDTO {
 	
 	
 	
+
 	public LoginresponseDTO(User user, String token, Role role) {
 		super();
 		this.user = user;
 		this.token = token;
+		this.module = module;
 		this.role = role;
 	}
+
+
 	public LoginresponseDTO() {
 		super();
 	}

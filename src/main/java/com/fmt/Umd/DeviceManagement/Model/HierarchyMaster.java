@@ -10,6 +10,7 @@ import javax.persistence.Id;
 public class HierarchyMaster {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="hm_id")
 	private int id;
 	@Column(name="hierarchy_type_id")
 	private int HierarchyTypeId;
