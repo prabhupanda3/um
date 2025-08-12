@@ -1,5 +1,6 @@
 package com.fmt.Umd.Controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fmt.Umd.DeviceManagement.Model.HierarchyMaster;
 import com.fmt.Umd.Dto.LoginresponseDTO;
 import com.fmt.Umd.Dto.RegistrationDto;
 import com.fmt.Umd.model.Module;
@@ -67,8 +69,14 @@ public class AuthenticationController {
 	   Set<Module> moduleset=roleService.getRolesByUserName(user.getUsername());
 	 // Set<Module> moduleset= moduleService.getModuleListBySetOfEndpoints(endpoints);
 		User user2=authenticationService.getUserByUserName(user.getUsername());
+		List<HierarchyMaster> hierarchy=user2.getHierarchyMaster();
+		System.out.println(hierarchy.toString());
+		List<String> masterlist=new ArrayList<>();
+		hierarchy.stream().forEach((HierarchyMaster hierarchyMaster)->masterlist.add(hierarchyMaster.getHierarchyTitle()));
+		
 		Role role=authenticationService.getUserRoleByUserName(user2.getUsername());
-		 loginresponseDTO=new LoginresponseDTO(user,token,role);
+		
+		 loginresponseDTO=new LoginresponseDTO(user,token,role,masterlist);
 		if(token!=null) {
           List<GrantedAuthority> authorities=(List<GrantedAuthority>)authentication.getAuthorities();
  

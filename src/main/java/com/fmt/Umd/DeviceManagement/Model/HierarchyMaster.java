@@ -90,6 +90,9 @@ public class HierarchyMaster {
 	public void setDeviceLocation(String deviceLocation) {
 		this.deviceLocation = deviceLocation;
 	}
+	public String getHierarchyTitle() {
+		return hierarchyTitle;
+	}
 	
 	
 	

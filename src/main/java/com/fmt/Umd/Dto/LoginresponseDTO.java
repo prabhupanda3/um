@@ -13,17 +13,16 @@ public class LoginresponseDTO {
 	private String token;
 	private Set<Module> module;
 	private Role role;
-	
-	
-	
+	private List<String> hierarchyList;
 	
 
-	public LoginresponseDTO(User user, String token, Role role) {
+
+	public LoginresponseDTO(User user, String token, Role role, List<String> hierarchyList) {
 		super();
 		this.user = user;
 		this.token = token;
-		this.module = module;
 		this.role = role;
+		this.hierarchyList = hierarchyList;
 	}
 
 
@@ -55,6 +54,16 @@ public class LoginresponseDTO {
 	}
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+
+	public List<String> getHierarchyList() {
+		return hierarchyList;
+	}
+
+
+	public void setHierarchyList(List<String> hierarchyList) {
+		this.hierarchyList = hierarchyList;
 	}
 
 	
