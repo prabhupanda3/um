@@ -180,5 +180,22 @@ public class DeviceSummaryController {
 			return map;		}
 		
 	}
+	
+	
+	
+	public void getSignalStrength(@RequestBody HierarchyDto hierarchyDto) {
+		try {
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

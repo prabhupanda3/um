@@ -54,7 +54,7 @@ public class RoleService {
 		Set<com.fmt.Umd.model.Module> moduleSet=new HashSet<com.fmt.Umd.model.Module>();
 		try {
 	Role	roles=userRepository.getUSerRoleByUseName(username);
-	//roles.stream().forEach(role->endpoints.add(role.getEndPoint()));
+	
 	moduleSet= roles.getModule();
 	return moduleSet;
 	}

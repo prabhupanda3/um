@@ -1,8 +1,10 @@
 package com.fmt.Umd.Dto;
 
 import java.util.List;
+import java.util.Queue;
 
 import com.fmt.Umd.UserDto.ModuleSabmoduleActionDTO;
+import com.fmt.Umd.model.SabModuleAction;
 
 public class RoleDTO {
 
@@ -14,8 +16,8 @@ public class RoleDTO {
 	private String parentRole;
 	private String roleDes;
 	private List<ModuleSabmoduleActionDTO> moduleSabmoduleActionDTO;
-	
-	
+	private Queue<com.fmt.Umd.model.Module> module;
+	private List<SabModuleAction> submoduleAction;
 	
 	
 	public String getAuthority() {
@@ -48,6 +50,22 @@ public class RoleDTO {
 	}
 	public void setRoleDes(String roleDes) {
 		this.roleDes = roleDes;
+	}
+	
+	
+	
+	
+	public Queue<com.fmt.Umd.model.Module> getModule() {
+		return module;
+	}
+	public void setModule(Queue<com.fmt.Umd.model.Module> module) {
+		this.module = module;
+	}
+	public List<SabModuleAction> getSubmoduleAction() {
+		return submoduleAction;
+	}
+	public void setSubmoduleAction(List<SabModuleAction> submoduleAction) {
+		this.submoduleAction = submoduleAction;
 	}
 	
 	

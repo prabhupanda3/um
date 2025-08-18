@@ -33,14 +33,14 @@ public class Module {
 		        inverseJoinColumns = {@JoinColumn(name="submodule_id")}
 			    )
 	private List<SubModule> subModule;
-
+private String icon;
 	
 	public Module() {
 		super();
 	}
 	
 	public Module(int moduleId, String moduleName, String moduleDescription, String displayOrder, boolean activeFlag,
-			List<SubModule> subModule) {
+			List<SubModule> subModule, String icon) {
 		super();
 		this.moduleId = moduleId;
 		this.moduleName = moduleName;
@@ -48,13 +48,9 @@ public class Module {
 		this.displayOrder = displayOrder;
 		this.activeFlag = activeFlag;
 		this.subModule = subModule;
+		this.icon = icon;
 	}
-
-
-
-
-
-
+	
 	public int getModuleId() {
 		return moduleId;
 	}
@@ -85,6 +81,13 @@ public class Module {
 	}
 	public void setSubModule(List<SubModule> subModule) {
 		this.subModule = subModule;
+	}
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 
 	public boolean isActiveFlag() {

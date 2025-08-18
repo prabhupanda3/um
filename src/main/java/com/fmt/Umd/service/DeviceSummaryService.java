@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fmt.Umd.Dashboard.Projection.CommSummaryProjection;
+import com.fmt.Umd.Dashboard.Projection.DeviceDiagnosisSummaryProjection;
 import com.fmt.Umd.Dashboard.Repository.DaySummaryRepository;
+import com.fmt.Umd.Dashboard.Repository.DeviceDiagnosisSummaryRepository;
 import com.fmt.Umd.DeviceManagement.Model.Hierarchy;
 import com.fmt.Umd.DeviceManagement.Repository.HyrarchyRepository;
 import com.fmt.Umd.Exception.HierarchyException;
@@ -31,6 +33,8 @@ public class DeviceSummaryService {
  private TotalMasterDataRepository totalMasterDataRepository;
  @Autowired
 private LiveCommunicationRepository liveCommunicationRepository;
+ @Autowired
+ private DeviceDiagnosisSummaryRepository deviceDiagnosisSummaryRepository;
  @Autowired
  private DaySummaryRepository daySummaryRepository;
 	public Map<Integer, String> getUserHirarchy(String username) {
@@ -156,5 +160,34 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId, double hierarch
 			return communicationCountPerday;
 		}
 	}
+	
+	public void getSignalStrength(String levelId, double hierarchyIds,String date) {
+		try {
+			
+			List<TotalMasterData> totalMasterList=getMasterSizeFilter(levelId,hierarchyIds);
+			List<String> meterList=new ArrayList<>();
+			totalMasterList.stream().forEach((TotalMasterData tm)->meterList.add(tm.getMeter_sl_no()));
+			List<DeviceDiagnosisSummaryProjection> ddsp=deviceDiagnosisSummaryRepository.getModemSlNumberAndgsmSignal(meterList,date);
+			HashMap<String, Integer> hs=new HashMap<>();
+			int goodSignalCount=0;
+			ddsp.stream().forEach((DeviceDiagnosisSummaryProjection ddspj)->{
+				if(Integer.parseInt(ddspj.getGsmSignal())>=20) {
+					//hs.put("Good", goodSignalCount++);
+				}
+				else if(Integer.parseInt(ddspj.getGsmSignal())>=10 && Integer.parseInt(ddspj.getGsmSignal())<20) {
+					
+				}
+				else {
+					
+				}
+			});
+		
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	
 	
 }

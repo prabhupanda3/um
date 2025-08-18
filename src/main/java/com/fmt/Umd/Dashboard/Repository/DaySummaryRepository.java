@@ -27,4 +27,9 @@ List<CommSummaryProjection> findLastSevenDaysCommunicationByDivision(@Param("dat
         "from daysummary d"+" where d.comm_date in(:dates) and d.sdo=:sdo "+"Group by d.comm_date order by d.comm_date desc",nativeQuery = true)
 List<CommSummaryProjection> findLastSevenDaysCommunicationBySdo(@Param("dates") List<String> dates,@Param("sdo")String sdo);
 
+
+
+
+
+
 }
