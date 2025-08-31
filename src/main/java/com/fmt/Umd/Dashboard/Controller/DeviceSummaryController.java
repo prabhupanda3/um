@@ -182,12 +182,15 @@ public class DeviceSummaryController {
 	}
 	
 	
-	
-	public void getSignalStrength(@RequestBody HierarchyDto hierarchyDto) {
+	@PostMapping("/signalStrength")
+	public Map<String, Integer> getSignalStrength(@RequestBody HierarchyDto hierarchyDto) {
+		Map<String, Integer> signalStength=new HashMap<>();
 		try {
-			
+		return 	signalStength=deviceSummaryService.getSignalStrength(hierarchyDto.getHirarchyLevel(), hierarchyDto.getHierarchyId(), hierarchyDto.getDate());
+		
 		}catch(Exception ex) {
 			ex.printStackTrace();
+			return signalStength=null;
 		}
 	}
 	

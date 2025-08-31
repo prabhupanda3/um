@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -161,29 +162,39 @@ public List<TotalMasterData> getMasterSizeFilter(String levelId, double hierarch
 		}
 	}
 	
-	public void getSignalStrength(String levelId, double hierarchyIds,String date) {
+	public Map<String, Integer> getSignalStrength(String levelId, double hierarchyIds,String date) {
+		Map<String, Integer> hs=new HashMap<>();
 		try {
-			
+			System.out.println("Date :"+date);
 			List<TotalMasterData> totalMasterList=getMasterSizeFilter(levelId,hierarchyIds);
 			List<String> meterList=new ArrayList<>();
 			totalMasterList.stream().forEach((TotalMasterData tm)->meterList.add(tm.getMeter_sl_no()));
 			List<DeviceDiagnosisSummaryProjection> ddsp=deviceDiagnosisSummaryRepository.getModemSlNumberAndgsmSignal(meterList,date);
-			HashMap<String, Integer> hs=new HashMap<>();
-			int goodSignalCount=0;
-			ddsp.stream().forEach((DeviceDiagnosisSummaryProjection ddspj)->{
-				if(Integer.parseInt(ddspj.getGsmSignal())>=20) {
-					//hs.put("Good", goodSignalCount++);
-				}
-				else if(Integer.parseInt(ddspj.getGsmSignal())>=10 && Integer.parseInt(ddspj.getGsmSignal())<20) {
-					
-				}
-				else {
-					
-				}
+            ArrayList<String> goodSignal=new ArrayList<>();
+            ArrayList<String> moderateSignal=new ArrayList<>();
+            ArrayList<String> badSignal=new ArrayList<>();
+            System.out.println("DDSP :"+ddsp.size());
+			ddsp.stream().forEach((DeviceDiagnosisSummaryProjection d)->{
+			          Integer signal= Integer.parseInt(d.getGsmSignal());
+					if(signal>=20) {
+						goodSignal.add(d.getMeterSerialNo() );
+					}	
+					else if(signal>=10 && signal<=20){
+						moderateSignal.add(d.getMeterSerialNo() );
+					}
+					else {
+						badSignal.add(d.getMeterSerialNo() );
+					}
 			});
-		
+			hs.put("Good", goodSignal.size());
+			hs.put("Moderate", moderateSignal.size());
+			hs.put("Bad", badSignal.size());
+			
+           return hs;
+
 		}catch(Exception ex) {
 			ex.printStackTrace();
+			return hs;
 		}
 	}
 	
